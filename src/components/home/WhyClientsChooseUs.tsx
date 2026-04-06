@@ -3,6 +3,7 @@
 import { Box, Container, Grid, Heading, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { Brain, ListChecks, TrendingUp, Users } from 'lucide-react';
+import { SectionGeometry } from '@/components/ui/SectionGeometry';
 
 const MotionBox = motion.create(Box);
 
@@ -35,8 +36,9 @@ const reasons = [
 
 export function WhyClientsChooseUs() {
   return (
-    <Box py={{ base: 16, md: 24 }}>
-      <Container maxW="7xl">
+    <Box position="relative" overflow="hidden" py={{ base: 16, md: 24 }}>
+      <SectionGeometry variant="cards" />
+      <Container maxW="7xl" position="relative" zIndex={1}>
         <VStack gap={{ base: 10, md: 12 }} align="stretch">
           <MotionBox
             textAlign="center"

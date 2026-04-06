@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { Box } from '@chakra-ui/react';
 import { Providers } from './providers';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -72,9 +73,11 @@ export default function RootLayout({
         <Providers>
           <SkipToContent />
           <SmartBackground />
-          <Navbar />
-          <main id="main-content" style={{ flex: 1, minHeight: '100vh' }}>{children}</main>
-          <Footer />
+          <Box position="relative" zIndex={1} minH="100vh" display="flex" flexDirection="column">
+            <Navbar />
+            <main id="main-content" style={{ flex: 1 }}>{children}</main>
+            <Footer />
+          </Box>
           <CookieConsent />
         </Providers>
       </body>

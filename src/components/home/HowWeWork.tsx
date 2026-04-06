@@ -3,6 +3,7 @@
 import { Box, Container, Flex, Grid, Heading, Text, VStack, Button } from '@chakra-ui/react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { SectionGeometry } from '@/components/ui/SectionGeometry';
 
 const MotionBox = motion.create(Box);
 
@@ -33,8 +34,9 @@ const steps = [
 
 export function HowWeWork() {
   return (
-    <Box py={{ base: 16, md: 24 }}>
-      <Container maxW="7xl">
+    <Box position="relative" overflow="hidden" py={{ base: 16, md: 24 }}>
+      <SectionGeometry variant="process" />
+      <Container maxW="7xl" position="relative" zIndex={1}>
         <VStack gap={{ base: 10, md: 12 }} align="stretch">
           <MotionBox
             textAlign="center"

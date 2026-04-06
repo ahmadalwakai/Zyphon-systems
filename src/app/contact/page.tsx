@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Box, Container, Grid, Heading, Text, VStack } from '@chakra-ui/react';
 import { ContactForm } from '@/components/contact/ContactForm';
 import { ContactInfo } from '@/components/contact/ContactInfo';
+import { SectionGeometry } from '@/components/ui/SectionGeometry';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
@@ -12,8 +13,9 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <Box py={{ base: 16, md: 24 }}>
-        <Container maxW="7xl">
+      <Box position="relative" overflow="hidden" py={{ base: 16, md: 24 }}>
+        <SectionGeometry variant="cards" />
+        <Container maxW="7xl" position="relative" zIndex={1}>
           <VStack gap={{ base: 6, md: 8 }} align="center" textAlign="center" mb={{ base: 12, md: 16 }}>
             <Heading
               as="h1"

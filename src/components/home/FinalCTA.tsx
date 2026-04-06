@@ -3,13 +3,15 @@
 import { Box, Container, Flex, Heading, Text, VStack, Button } from '@chakra-ui/react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { SectionGeometry } from '@/components/ui/SectionGeometry';
 
 const MotionBox = motion.create(Box);
 
 export function FinalCTA() {
   return (
-    <Box py={{ base: 16, md: 24 }}>
-      <Container maxW="7xl">
+    <Box position="relative" overflow="hidden" py={{ base: 16, md: 24 }}>
+      <SectionGeometry variant="cta" />
+      <Container maxW="7xl" position="relative" zIndex={1}>
         <MotionBox
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

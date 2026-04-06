@@ -4,6 +4,7 @@ import { HeroSection } from '@/components/home/HeroSection';
 import { WhatWeBuild } from '@/components/home/WhatWeBuild';
 import { WhoWeWorkWith } from '@/components/home/WhoWeWorkWith';
 import { HowWeWork } from '@/components/home/HowWeWork';
+import { SectionDivider } from '@/components/ui/SectionDivider';
 
 // Lazy load below-fold components
 const TypicalProjects = dynamic(
@@ -39,11 +40,15 @@ export default function Home() {
     <>
       <JsonLd data={organizationSchema} />
       <HeroSection />
+      <SectionDivider />
       <WhatWeBuild />
+      <SectionDivider />
       <WhoWeWorkWith />
       <HowWeWork />
+      <SectionDivider />
       <TypicalProjects />
       <WhyClientsChooseUs />
+      <SectionDivider />
       <FinalCTA />
     </>
   );

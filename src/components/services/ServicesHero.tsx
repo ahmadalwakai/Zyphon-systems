@@ -2,14 +2,16 @@
 
 import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { SectionGeometry } from '@/components/ui/SectionGeometry';
 
 const MotionHeading = motion.create(Heading);
 const MotionText = motion.create(Text);
 
 export function ServicesHero() {
   return (
-    <Box py={{ base: 16, md: 24, lg: 32 }}>
-      <Container maxW="7xl">
+    <Box position="relative" overflow="hidden" py={{ base: 16, md: 24, lg: 32 }}>
+      <SectionGeometry variant="hero" />
+      <Container maxW="7xl" position="relative" zIndex={1}>
         <VStack gap={{ base: 6, md: 8 }} align="center" textAlign="center">
           <MotionHeading
             as="h1"
