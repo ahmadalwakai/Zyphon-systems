@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { staticProjects } from '@/data/projects';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zyphon.systems';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zyphonsystems.com';
 
   const staticPages: MetadataRoute.Sitemap = [
     {

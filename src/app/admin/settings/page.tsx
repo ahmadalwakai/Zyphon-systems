@@ -48,7 +48,7 @@ export default function SettingsPage() {
             <Box mt={3} p={4} borderRadius="lg" bg="whiteAlpha.50">
               <VStack align="start" gap={2}>
                 <Text color="gray.300" fontSize="sm">
-                  <strong>Email:</strong> hello@zyphon.systems
+                  <strong>Email:</strong> hello@zyphonsystems.com
                 </Text>
                 <Text color="gray.300" fontSize="sm">
                   <strong>Phone:</strong> +44 (0) 123 456 7890

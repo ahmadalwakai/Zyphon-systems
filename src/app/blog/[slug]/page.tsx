@@ -73,7 +73,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     publisher: {
       '@type': 'Organization',
       name: 'Zyphon Systems',
-      url: 'https://zyphon.dev',
+      url: 'https://zyphonsystems.com',
     },
     ...(post.cover_image_url && { image: post.cover_image_url }),
   };

@@ -1,5 +1,5 @@
 export const contactInfo = {
-  email: 'hello@zyphon.systems',
+  email: 'hello@zyphonsystems.com',
   phone: '07901846297',
   whatsappUrl: 'https://wa.me/447901846297',
   linkedinUrl: 'https://linkedin.com/company/zyphon',

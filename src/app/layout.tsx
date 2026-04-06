@@ -21,7 +21,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://zyphon.dev'),
+  metadataBase: new URL('https://zyphonsystems.com'),
   title: {
     default: 'Zyphon Systems — Production-Ready Mobile Apps, Admin Panels & Digital Platforms',
     template: '%s | Zyphon Systems',

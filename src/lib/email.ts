@@ -13,8 +13,8 @@ function getResend(): Resend {
   return _resend;
 }
 
-const FROM_EMAIL = process.env.FROM_EMAIL || 'Zyphon Systems <notifications@zyphon.systems>';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hello@zyphon.systems';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'Zyphon Systems <notifications@zyphonsystems.com>';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hello@zyphonsystems.com';
 
 export async function sendInquiryNotification(inquiry: {
   full_name: string;
@@ -147,7 +147,7 @@ export async function sendVerificationEmail(email: string, token: string, fullNa
     return;
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zyphon.systems';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zyphonsystems.com';
   const verifyUrl = `${siteUrl}/api/customer/verify?token=${encodeURIComponent(token)}`;
 
   try {
@@ -208,7 +208,7 @@ export async function sendPasswordResetEmail(email: string, token: string, fullN
     return;
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zyphon.systems';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zyphonsystems.com';
   const resetUrl = `${siteUrl}/portal/reset-password?token=${encodeURIComponent(token)}`;
 
   try {

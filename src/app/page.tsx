@@ -23,13 +23,13 @@ const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Zyphon Systems',
-  url: 'https://zyphon.dev',
-  logo: 'https://zyphon.dev/favicon.ico',
+  url: 'https://zyphonsystems.com',
+  logo: 'https://zyphonsystems.com/favicon.svg',
   description: 'Production-ready mobile apps, admin panels, backend systems, and scalable digital platforms.',
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer service',
-    email: 'hello@zyphon.dev',
+    email: 'hello@zyphonsystems.com',
   },
   sameAs: ['https://github.com/zyphon-systems'],
 };

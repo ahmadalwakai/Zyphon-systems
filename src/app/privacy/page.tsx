@@ -190,7 +190,7 @@ export default function PrivacyPage() {
                 <Box mt={3}>
                   <Text fontWeight="medium">Zyphon Systems</Text>
                   <Text color={{ base: 'gray.600', _dark: 'gray.400' }}>
-                    Email: privacy@zyphon.systems
+                    Email: privacy@zyphonsystems.com
                   </Text>
                 </Box>
               </Section>
