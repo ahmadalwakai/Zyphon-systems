@@ -1,6 +1,17 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Guard: during CI builds RESEND_API_KEY may not exist.
+// Lazy init to avoid crash at module import time.
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!_resend) {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not configured');
+    }
+    _resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return _resend;
+}
 
 const FROM_EMAIL = process.env.FROM_EMAIL || 'Zyphon Systems <notifications@zyphon.systems>';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hello@zyphon.systems';
@@ -17,7 +28,7 @@ export async function sendInquiryNotification(inquiry: {
   }
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: ADMIN_EMAIL,
       subject: `New Inquiry: ${inquiry.project_type || 'General'} from ${inquiry.full_name}`,
@@ -59,7 +70,7 @@ export async function sendBookingNotification(booking: {
   }
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: ADMIN_EMAIL,
       subject: `New Meeting Request from ${booking.full_name}`,
@@ -101,7 +112,7 @@ export async function sendBookingConfirmation(booking: {
   }
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: booking.email,
       subject: 'Meeting Request Received - Zyphon Systems',
@@ -140,7 +151,7 @@ export async function sendVerificationEmail(email: string, token: string, fullNa
   const verifyUrl = `${siteUrl}/api/customer/verify?token=${encodeURIComponent(token)}`;
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: email,
       subject: 'Verify your Zyphon Systems account',
@@ -173,7 +184,7 @@ export async function sendCustomEmail(to: string, subject: string, body: string)
   }
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to,
       subject,
@@ -201,7 +212,7 @@ export async function sendPasswordResetEmail(email: string, token: string, fullN
   const resetUrl = `${siteUrl}/portal/reset-password?token=${encodeURIComponent(token)}`;
 
   try {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM_EMAIL,
       to: email,
       subject: 'Reset your Zyphon Systems password',

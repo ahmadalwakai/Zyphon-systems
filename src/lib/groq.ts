@@ -1,12 +1,21 @@
 import Groq from 'groq-sdk';
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+// Guard: during CI builds GROQ_API_KEY may not exist.
+// Lazy init to avoid crash at module import time.
+let _groq: Groq | null = null;
+function getGroq(): Groq {
+  if (!_groq) {
+    if (!process.env.GROQ_API_KEY) {
+      throw new Error('GROQ_API_KEY is not configured');
+    }
+    _groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+  }
+  return _groq;
+}
 
 export async function askGroq(prompt: string): Promise<string> {
   try {
-    const chatCompletion = await groq.chat.completions.create({
+    const chatCompletion = await getGroq().chat.completions.create({
       messages: [
         {
           role: 'system',
