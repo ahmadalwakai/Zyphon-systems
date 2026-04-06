@@ -1,0 +1,107 @@
+import type { ProcessStep } from '@/types';
+
+export const processSteps: ProcessStep[] = [
+  {
+    id: 1,
+    number: '01',
+    title: 'Discovery',
+    description: 'Understand the business, users, workflow, and real operational needs. We dive deep into how your business works, who your users are, and what problems need solving.',
+    deliverables: [
+      'Business requirements document',
+      'User personas and journeys',
+      'Current workflow analysis',
+      'Pain points identification',
+    ],
+  },
+  {
+    id: 2,
+    number: '02',
+    title: 'Scope & System Planning',
+    description: 'Define product structure, modules, priorities, and technical direction. We map out exactly what needs to be built and in what order.',
+    deliverables: [
+      'Feature specification',
+      'System architecture design',
+      'Module breakdown',
+      'Priority matrix',
+      'Technical stack selection',
+    ],
+  },
+  {
+    id: 3,
+    number: '03',
+    title: 'UX & UI Design',
+    description: 'Create intuitive user experiences and visual designs that align with your brand and user needs. Every screen is designed with purpose.',
+    deliverables: [
+      'Wireframes',
+      'UI mockups',
+      'Interactive prototypes',
+      'Design system',
+      'Asset preparation',
+    ],
+  },
+  {
+    id: 4,
+    number: '04',
+    title: 'Development Setup',
+    description: 'Establish the technical foundation, development environment, and project infrastructure. Set up for efficient and reliable development.',
+    deliverables: [
+      'Development environment',
+      'Code repository setup',
+      'CI/CD pipeline',
+      'Testing framework',
+      'Documentation structure',
+    ],
+  },
+  {
+    id: 5,
+    number: '05',
+    title: 'Core Development',
+    description: 'Build the app, admin panel, backend, and key workflows in a controlled and scalable way. Regular updates and demos throughout.',
+    deliverables: [
+      'Backend API development',
+      'Database implementation',
+      'Frontend development',
+      'Admin panel features',
+      'Integration work',
+    ],
+  },
+  {
+    id: 6,
+    number: '06',
+    title: 'Testing & QA',
+    description: 'Comprehensive testing to ensure reliability, performance, and user experience quality. We catch and fix issues before your users see them.',
+    deliverables: [
+      'Unit testing',
+      'Integration testing',
+      'User acceptance testing',
+      'Performance testing',
+      'Security audit',
+    ],
+  },
+  {
+    id: 7,
+    number: '07',
+    title: 'Launch Preparation',
+    description: 'Final preparations for going live. Everything from deployment setup to documentation and training materials.',
+    deliverables: [
+      'Production environment setup',
+      'Data migration',
+      'User documentation',
+      'Training materials',
+      'Launch checklist',
+    ],
+  },
+  {
+    id: 8,
+    number: '08',
+    title: 'Launch & Support',
+    description: 'Deploy, monitor, and support the product toward launch readiness. We stay involved to ensure a smooth launch and address any post-launch needs.',
+    deliverables: [
+      'Production deployment',
+      'Monitoring setup',
+      'Bug fixes and adjustments',
+      'Performance optimization',
+      'Ongoing support plan',
+    ],
+  },
+];
