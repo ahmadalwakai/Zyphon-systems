@@ -88,8 +88,23 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
               </VStack>
 
               {/* CTA */}
-              <Box p={6} borderTopWidth="1px" borderColor={{ base: 'gray.200', _dark: 'whiteAlpha.100' }}>
-                <Link href="/contact" onClick={onClose}>
+              <VStack p={6} gap={3} borderTopWidth="1px" borderColor={{ base: 'gray.200', _dark: 'whiteAlpha.100' }}>
+                <Link href="/book" onClick={onClose} style={{ width: '100%' }}>
+                  <Box
+                    borderWidth="1px"
+                    borderColor="primary.500"
+                    color="primary.400"
+                    fontWeight="semibold"
+                    borderRadius="lg"
+                    py={3}
+                    textAlign="center"
+                    _hover={{ bg: 'primary.500/10' }}
+                    transition="background 0.2s"
+                  >
+                    Book a Meeting
+                  </Box>
+                </Link>
+                <Link href="/contact" onClick={onClose} style={{ width: '100%' }}>
                   <Box
                     bg="primary.500"
                     color="white"
@@ -103,7 +118,7 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                     Get Started
                   </Box>
                 </Link>
-              </Box>
+              </VStack>
             </Flex>
           </MotionBox>
         </>

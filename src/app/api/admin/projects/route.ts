@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { getProjects, createProject, updateProject, deleteProject } from '@/lib/db';
+import { verifyAdminSession } from '@/lib/auth';
 
-async function isAuthenticated() {
-  const cookieStore = await cookies();
-  const adminAuth = cookieStore.get('admin_auth');
-  return adminAuth?.value === 'authenticated';
-}
-
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    if (!await isAuthenticated()) {
+    if (!await verifyAdminSession(request)) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -34,7 +28,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!await isAuthenticated()) {
+    if (!await verifyAdminSession(request)) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -75,7 +69,7 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    if (!await isAuthenticated()) {
+    if (!await verifyAdminSession(request)) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -124,7 +118,7 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    if (!await isAuthenticated()) {
+    if (!await verifyAdminSession(request)) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }

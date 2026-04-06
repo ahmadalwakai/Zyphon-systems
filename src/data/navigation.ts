@@ -4,6 +4,7 @@ export const mainNavigation: NavItem[] = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
   { label: 'Services', href: '/services' },
+  { label: 'Solutions', href: '/solutions' },
   { label: 'Process', href: '/process' },
   { label: 'Projects', href: '/projects' },
   { label: 'Contact', href: '/contact' },
@@ -14,9 +15,11 @@ export const footerNavigation = {
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },
     { label: 'Services', href: '/services' },
+    { label: 'Solutions', href: '/solutions' },
     { label: 'Process', href: '/process' },
     { label: 'Projects', href: '/projects' },
     { label: 'Contact', href: '/contact' },
+    { label: 'FAQ', href: '/faq' },
   ],
   services: [
     { label: 'Mobile App Development', href: '/services#mobile-apps' },
@@ -24,6 +27,7 @@ export const footerNavigation = {
     { label: 'Backend Development', href: '/services#backend' },
     { label: 'Full Platform Development', href: '/services#full-platform' },
     { label: 'Product Discovery', href: '/services#discovery' },
+    { label: 'View Solutions', href: '/solutions' },
   ],
   legal: [
     { label: 'Privacy Policy', href: '/privacy' },
@@ -34,6 +38,7 @@ export const footerNavigation = {
 export const adminNavigation: NavItem[] = [
   { label: 'Dashboard', href: '/admin' },
   { label: 'Inquiries', href: '/admin/inquiries' },
+  { label: 'Bookings', href: '/admin/bookings' },
   { label: 'Projects', href: '/admin/projects' },
   { label: 'Settings', href: '/admin/settings' },
 ];

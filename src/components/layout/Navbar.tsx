@@ -55,7 +55,21 @@ export function Navbar() {
             </HStack>
 
             {/* Desktop CTA */}
-            <HStack gap={4} display={{ base: 'none', md: 'flex' }}>
+            <HStack gap={3} display={{ base: 'none', md: 'flex' }}>
+              <Link href="/book">
+                <Button
+                  variant="outline"
+                  borderColor="primary.500"
+                  color="primary.400"
+                  fontWeight="semibold"
+                  borderRadius="lg"
+                  px={5}
+                  _hover={{ bg: 'primary.500/10' }}
+                  transition="all 0.2s"
+                >
+                  Book a Meeting
+                </Button>
+              </Link>
               <Link href="/contact">
                 <Button
                   bg="primary.500"

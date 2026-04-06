@@ -37,6 +37,20 @@ export async function POST(request: NextRequest) {
     // Create inquiry in database
     const inquiry = await createInquiry(sanitizedData);
 
+    // Send email notification (non-blocking)
+    try {
+      const { sendInquiryNotification } = await import('@/lib/email');
+      await sendInquiryNotification({
+        full_name: sanitizedData.fullName,
+        email: sanitizedData.email,
+        project_type: sanitizedData.projectType || '',
+        message: sanitizedData.message,
+      });
+    } catch (emailError) {
+      console.error('Email notification error:', emailError);
+      // Don't fail the request if email fails
+    }
+
     return NextResponse.json(
       { success: true, data: { id: inquiry.id } },
       { status: 201 }

@@ -1,5 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import {
+  verifyPassword,
+  generateSessionToken,
+  addSession,
+  removeSession,
+  ADMIN_COOKIE_NAME,
+  verifyAdminSessionFromCookies,
+} from '@/lib/auth';
+
+export async function GET() {
+  try {
+    const isValid = await verifyAdminSessionFromCookies();
+    
+    if (isValid) {
+      return NextResponse.json({ success: true, authenticated: true });
+    }
+    
+    return NextResponse.json(
+      { success: false, authenticated: false },
+      { status: 401 }
+    );
+  } catch (error) {
+    console.error('Auth check error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Auth check failed' },
+      { status: 500 }
+    );
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,26 +42,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const adminPassword = process.env.ADMIN_PASSWORD;
-
-    if (!adminPassword) {
-      console.error('ADMIN_PASSWORD not set in environment variables');
-      return NextResponse.json(
-        { success: false, error: 'Server configuration error' },
-        { status: 500 }
-      );
-    }
-
-    if (password !== adminPassword) {
+    if (!verifyPassword(password)) {
       return NextResponse.json(
         { success: false, error: 'Invalid password' },
         { status: 401 }
       );
     }
 
-    // Set httpOnly cookie
+    // Generate session token
+    const sessionToken = generateSessionToken();
+    addSession(sessionToken);
+
+    // Set httpOnly cookie with session token
     const cookieStore = await cookies();
-    cookieStore.set('admin_auth', 'authenticated', {
+    cookieStore.set(ADMIN_COOKIE_NAME, sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
@@ -53,7 +76,13 @@ export async function POST(request: NextRequest) {
 export async function DELETE() {
   try {
     const cookieStore = await cookies();
-    cookieStore.delete('admin_auth');
+    const sessionCookie = cookieStore.get(ADMIN_COOKIE_NAME);
+    
+    if (sessionCookie?.value) {
+      removeSession(sessionCookie.value);
+    }
+    
+    cookieStore.delete(ADMIN_COOKIE_NAME);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Logout error:', error);

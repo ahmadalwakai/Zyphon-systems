@@ -2,6 +2,14 @@ import { neon } from '@neondatabase/serverless';
 
 export const sql = neon(process.env.DATABASE_URL!);
 
+let dbInitialized = false;
+
+async function ensureDbInitialized() {
+  if (dbInitialized) return;
+  await initializeDatabase();
+  dbInitialized = true;
+}
+
 export async function initializeDatabase() {
   try {
     // Create inquiries table
@@ -44,6 +52,23 @@ export async function initializeDatabase() {
       )
     `;
 
+    // Create bookings table
+    await sql`
+      CREATE TABLE IF NOT EXISTS bookings (
+        id SERIAL PRIMARY KEY,
+        full_name VARCHAR(255) NOT NULL,
+        company_name VARCHAR(255),
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(50),
+        project_type VARCHAR(100),
+        preferred_date DATE,
+        preferred_time VARCHAR(10),
+        description TEXT NOT NULL,
+        status VARCHAR(20) DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT NOW()
+      )
+    `;
+
     console.log('Database tables initialized successfully');
     return { success: true };
   } catch (error) {
@@ -62,6 +87,7 @@ export async function createInquiry(data: {
   budget?: string;
   message: string;
 }) {
+  await ensureDbInitialized();
   const result = await sql`
     INSERT INTO inquiries (full_name, company_name, email, phone, project_type, budget, message)
     VALUES (${data.fullName}, ${data.companyName || null}, ${data.email}, ${data.phone || null}, ${data.projectType || null}, ${data.budget || null}, ${data.message})
@@ -71,12 +97,14 @@ export async function createInquiry(data: {
 }
 
 export async function getInquiries() {
+  await ensureDbInitialized();
   return await sql`
     SELECT * FROM inquiries ORDER BY created_at DESC
   `;
 }
 
 export async function updateInquiryStatus(id: number, status: string) {
+  await ensureDbInitialized();
   const result = await sql`
     UPDATE inquiries SET status = ${status} WHERE id = ${id} RETURNING *
   `;
@@ -85,6 +113,7 @@ export async function updateInquiryStatus(id: number, status: string) {
 
 // Project operations
 export async function getProjects(visibleOnly = false) {
+  await ensureDbInitialized();
   if (visibleOnly) {
     return await sql`
       SELECT * FROM projects WHERE is_visible = true ORDER BY display_order ASC
@@ -103,6 +132,7 @@ export async function createProject(data: {
   isVisible?: boolean;
   displayOrder?: number;
 }) {
+  await ensureDbInitialized();
   const result = await sql`
     INSERT INTO projects (title, type, description, outcome, is_visible, display_order)
     VALUES (${data.title}, ${data.type}, ${data.description}, ${data.outcome || null}, ${data.isVisible ?? true}, ${data.displayOrder ?? 0})
@@ -119,6 +149,7 @@ export async function updateProject(id: number, data: {
   isVisible?: boolean;
   displayOrder?: number;
 }) {
+  await ensureDbInitialized();
   const result = await sql`
     UPDATE projects SET
       title = COALESCE(${data.title}, title),
@@ -134,19 +165,64 @@ export async function updateProject(id: number, data: {
 }
 
 export async function deleteProject(id: number) {
+  await ensureDbInitialized();
   await sql`DELETE FROM projects WHERE id = ${id}`;
   return { success: true };
 }
 
 // Stats operations
 export async function getStats() {
+  await ensureDbInitialized();
   const totalInquiries = await sql`SELECT COUNT(*) as count FROM inquiries`;
   const newInquiries = await sql`SELECT COUNT(*) as count FROM inquiries WHERE status = 'new'`;
   const publishedProjects = await sql`SELECT COUNT(*) as count FROM projects WHERE is_visible = true`;
+  const pendingBookings = await sql`SELECT COUNT(*) as count FROM bookings WHERE status = 'pending'`;
   
   return {
     totalInquiries: Number(totalInquiries[0].count),
     newInquiries: Number(newInquiries[0].count),
     publishedProjects: Number(publishedProjects[0].count),
+    pendingBookings: Number(pendingBookings[0].count),
   };
+}
+
+// Booking operations
+export async function createBooking(data: {
+  fullName: string;
+  companyName?: string;
+  email: string;
+  phone?: string;
+  projectType?: string;
+  preferredDate?: string;
+  preferredTime?: string;
+  description: string;
+}) {
+  await ensureDbInitialized();
+  const result = await sql`
+    INSERT INTO bookings (full_name, company_name, email, phone, project_type, preferred_date, preferred_time, description)
+    VALUES (${data.fullName}, ${data.companyName || null}, ${data.email}, ${data.phone || null}, ${data.projectType || null}, ${data.preferredDate || null}, ${data.preferredTime || null}, ${data.description})
+    RETURNING *
+  `;
+  return result[0];
+}
+
+export async function getBookings() {
+  await ensureDbInitialized();
+  return await sql`
+    SELECT * FROM bookings ORDER BY preferred_date ASC, created_at DESC
+  `;
+}
+
+export async function updateBookingStatus(id: number, status: string) {
+  await ensureDbInitialized();
+  const result = await sql`
+    UPDATE bookings SET status = ${status} WHERE id = ${id} RETURNING *
+  `;
+  return result[0];
+}
+
+export async function getBookingById(id: number) {
+  await ensureDbInitialized();
+  const result = await sql`SELECT * FROM bookings WHERE id = ${id}`;
+  return result[0];
 }

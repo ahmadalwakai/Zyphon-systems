@@ -11,10 +11,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Check if already authenticated by trying to fetch protected data
+    // Check if already authenticated via session token
     const checkAuth = async () => {
       try {
-        const res = await fetch('/api/admin/inquiries');
+        const res = await fetch('/api/admin/auth', {
+          method: 'GET',
+          credentials: 'include'
+        });
         setIsAuthenticated(res.ok);
       } catch {
         setIsAuthenticated(false);
@@ -32,6 +35,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       const res = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ password }),
       });
 

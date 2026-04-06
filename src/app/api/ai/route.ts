@@ -1,17 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { askGroq } from '@/lib/groq';
-import { cookies } from 'next/headers';
-
-async function isAuthenticated() {
-  const cookieStore = await cookies();
-  const adminAuth = cookieStore.get('admin_auth');
-  return adminAuth?.value === 'authenticated';
-}
+import { verifyAdminSession } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
-    if (!await isAuthenticated()) {
+    if (!await verifyAdminSession(request)) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Box, Grid, Heading, Text, VStack, HStack, Badge } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { StatsCard } from '@/components/admin/StatsCard';
-import { MessageSquare, MessageSquarePlus, FolderKanban } from 'lucide-react';
+import { MessageSquare, MessageSquarePlus, CalendarDays, FolderKanban } from 'lucide-react';
 import Link from 'next/link';
 
 const MotionBox = motion.create(Box);
@@ -12,6 +12,7 @@ const MotionBox = motion.create(Box);
 interface Stats {
   totalInquiries: number;
   newInquiries: number;
+  pendingBookings: number;
   publishedProjects: number;
 }
 
@@ -25,23 +26,36 @@ interface Inquiry {
 }
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<Stats>({ totalInquiries: 0, newInquiries: 0, publishedProjects: 0 });
+  const [stats, setStats] = useState<Stats>({ totalInquiries: 0, newInquiries: 0, pendingBookings: 0, publishedProjects: 0 });
   const [recentInquiries, setRecentInquiries] = useState<Inquiry[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('/api/admin/inquiries');
-        if (res.ok) {
-          const data = await res.json();
-          const inquiries = data.data || [];
+        // Fetch inquiries
+        const inquiriesRes = await fetch('/api/admin/inquiries', { credentials: 'include' });
+        let inquiries: Inquiry[] = [];
+        if (inquiriesRes.ok) {
+          const data = await inquiriesRes.json();
+          inquiries = data.data || [];
           setRecentInquiries(inquiries.slice(0, 5));
-          setStats({
-            totalInquiries: inquiries.length,
-            newInquiries: inquiries.filter((i: Inquiry) => i.status === 'new').length,
-            publishedProjects: 4, // Will be dynamic when projects are fetched
-          });
         }
+
+        // Fetch bookings
+        const bookingsRes = await fetch('/api/admin/bookings', { credentials: 'include' });
+        let pendingBookings = 0;
+        if (bookingsRes.ok) {
+          const data = await bookingsRes.json();
+          const bookings = data.bookings || [];
+          pendingBookings = bookings.filter((b: { status: string }) => b.status === 'pending').length;
+        }
+
+        setStats({
+          totalInquiries: inquiries.length,
+          newInquiries: inquiries.filter((i: Inquiry) => i.status === 'new').length,
+          pendingBookings,
+          publishedProjects: 4, // Will be dynamic when projects are fetched
+        });
       } catch (error) {
         console.error('Failed to fetch data:', error);
       }
@@ -77,7 +91,7 @@ export default function AdminDashboard() {
         </Text>
       </MotionBox>
 
-      <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
+      <Grid templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }} gap={6}>
         <StatsCard
           title="Total Inquiries"
           value={stats.totalInquiries}
@@ -93,18 +107,25 @@ export default function AdminDashboard() {
           delay={0.2}
         />
         <StatsCard
+          title="Pending Bookings"
+          value={stats.pendingBookings}
+          icon={CalendarDays}
+          color="#0ea5e9"
+          delay={0.3}
+        />
+        <StatsCard
           title="Published Projects"
           value={stats.publishedProjects}
           icon={FolderKanban}
           color="#7c3aed"
-          delay={0.3}
+          delay={0.4}
         />
       </Grid>
 
       <MotionBox
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
       >
         <Box
           borderRadius="xl"

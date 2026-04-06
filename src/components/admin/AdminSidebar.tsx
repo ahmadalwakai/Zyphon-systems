@@ -5,11 +5,12 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ZyphonLogo } from '@/components/brand/ZyphonLogo';
 import { adminNavigation } from '@/data/navigation';
-import { LayoutDashboard, MessageSquare, FolderKanban, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, MessageSquare, CalendarDays, FolderKanban, Settings, LogOut } from 'lucide-react';
 
 const iconMap: Record<string, React.ComponentType<{ size?: number }>> = {
   Dashboard: LayoutDashboard,
   Inquiries: MessageSquare,
+  Bookings: CalendarDays,
   Projects: FolderKanban,
   Settings: Settings,
 };

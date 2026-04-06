@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { getInquiries, updateInquiryStatus } from '@/lib/db';
+import { verifyAdminSession } from '@/lib/auth';
 
-async function isAuthenticated() {
-  const cookieStore = await cookies();
-  const adminAuth = cookieStore.get('admin_auth');
-  return adminAuth?.value === 'authenticated';
-}
-
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    if (!await isAuthenticated()) {
+    if (!await verifyAdminSession(request)) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -34,7 +28,7 @@ export async function GET() {
 
 export async function PATCH(request: NextRequest) {
   try {
-    if (!await isAuthenticated()) {
+    if (!await verifyAdminSession(request)) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
