@@ -17,8 +17,15 @@ async function addAdmin() {
     process.exit(1);
   }
 
-  const email = 'ahmadalwakai76@gmail.com';
-  const password = 'Aa234311Aa@@@';
+  // Get email and password from command line args
+  const email = process.argv[2];
+  const password = process.argv[3];
+
+  if (!email || !password) {
+    console.error('Usage: npx tsx scripts/add-admin.ts <email> <password>');
+    process.exit(1);
+  }
+
   const passwordHash = hashPassword(password);
 
   const sql = neon(process.env.DATABASE_URL);
