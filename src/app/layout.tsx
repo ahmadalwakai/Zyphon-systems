@@ -38,6 +38,10 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Zyphon Systems' }],
   creator: 'Zyphon Systems',
+  icons: {
+    icon: '/favicon.svg',
+  },
+  manifest: '/manifest.json',
   openGraph: {
     type: 'website',
     locale: 'en_GB',

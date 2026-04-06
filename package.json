@@ -7,7 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate-profile": "npx tsx scripts/generate-profile.ts"
+    "typecheck": "tsc --noEmit",
+    "db:init": "npx tsx scripts/init-db.ts",
+    "db:seed": "npx tsx scripts/seed-db.ts",
+    "db:setup": "npm run db:init && npm run db:seed",
+    "check-env": "npx tsx scripts/check-env.ts",
+    "generate-profile": "npx tsx scripts/generate-profile.ts",
+    "pre-deploy": "npx tsx scripts/pre-deploy.ts"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.34.0",
@@ -30,6 +36,7 @@
     "@types/pdfkit": "^0.17.5",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.4.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
     "tsx": "^4.21.0",
