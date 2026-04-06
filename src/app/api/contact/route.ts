@@ -50,9 +50,10 @@ export async function POST(request: NextRequest) {
     const inquiry = await createInquiry(sanitizedData);
 
     // Send email notification (non-blocking)
+    let emailSent = false;
     try {
       const { sendInquiryNotification } = await import('@/lib/email');
-      await sendInquiryNotification({
+      emailSent = await sendInquiryNotification({
         full_name: sanitizedData.fullName,
         email: sanitizedData.email,
         project_type: sanitizedData.projectType || '',
@@ -62,11 +63,11 @@ export async function POST(request: NextRequest) {
       log('error', 'Email notification error', { error: emailError instanceof Error ? emailError.message : 'Unknown', route: '/api/contact' });
     }
 
-    log('info', 'New inquiry received', { id: inquiry.id, email: sanitizedData.email, route: '/api/contact' });
+    log('info', 'New inquiry received', { id: inquiry.id, email: sanitizedData.email, emailSent, route: '/api/contact' });
     await logActivity('system', 'inquiry_received', 'inquiry', inquiry.id, { from: sanitizedData.email });
 
     return NextResponse.json(
-      { success: true, data: { id: inquiry.id } },
+      { success: true, data: { id: inquiry.id }, emailSent },
       { status: 201 }
     );
   } catch (error) {

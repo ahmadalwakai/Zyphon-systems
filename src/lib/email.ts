@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { log } from './logger';
 
 // Guard: during CI builds RESEND_API_KEY may not exist.
 // Lazy init to avoid crash at module import time.
@@ -21,10 +22,10 @@ export async function sendInquiryNotification(inquiry: {
   email: string;
   project_type: string;
   message: string;
-}): Promise<void> {
+}): Promise<boolean> {
   if (!process.env.RESEND_API_KEY) {
-    console.log('RESEND_API_KEY not set, skipping email notification');
-    return;
+    log('warn', 'RESEND_API_KEY not set, skipping email notification', { function: 'sendInquiryNotification' });
+    return false;
   }
 
   try {
@@ -51,9 +52,11 @@ export async function sendInquiryNotification(inquiry: {
         </div>
       `,
     });
+    log('info', 'Inquiry notification sent', { to: ADMIN_EMAIL, from: inquiry.email, function: 'sendInquiryNotification' });
+    return true;
   } catch (error) {
-    console.error('Failed to send inquiry notification:', error);
-    throw error;
+    log('error', 'Failed to send inquiry notification', { error: error instanceof Error ? error.message : 'Unknown', function: 'sendInquiryNotification' });
+    return false;
   }
 }
 
@@ -63,10 +66,10 @@ export async function sendBookingNotification(booking: {
   preferred_date: string;
   preferred_time: string;
   description: string;
-}): Promise<void> {
+}): Promise<boolean> {
   if (!process.env.RESEND_API_KEY) {
-    console.log('RESEND_API_KEY not set, skipping email notification');
-    return;
+    log('warn', 'RESEND_API_KEY not set, skipping email notification', { function: 'sendBookingNotification' });
+    return false;
   }
 
   try {
@@ -94,9 +97,11 @@ export async function sendBookingNotification(booking: {
         </div>
       `,
     });
+    log('info', 'Booking notification sent', { to: ADMIN_EMAIL, from: booking.email, function: 'sendBookingNotification' });
+    return true;
   } catch (error) {
-    console.error('Failed to send booking notification:', error);
-    throw error;
+    log('error', 'Failed to send booking notification', { error: error instanceof Error ? error.message : 'Unknown', function: 'sendBookingNotification' });
+    return false;
   }
 }
 
@@ -105,10 +110,10 @@ export async function sendBookingConfirmation(booking: {
   email: string;
   preferred_date: string;
   preferred_time: string;
-}): Promise<void> {
+}): Promise<boolean> {
   if (!process.env.RESEND_API_KEY) {
-    console.log('RESEND_API_KEY not set, skipping email confirmation');
-    return;
+    log('warn', 'RESEND_API_KEY not set, skipping email confirmation', { function: 'sendBookingConfirmation' });
+    return false;
   }
 
   try {
@@ -135,16 +140,18 @@ export async function sendBookingConfirmation(booking: {
         </div>
       `,
     });
+    log('info', 'Booking confirmation sent', { to: booking.email, function: 'sendBookingConfirmation' });
+    return true;
   } catch (error) {
-    console.error('Failed to send booking confirmation:', error);
-    throw error;
+    log('error', 'Failed to send booking confirmation', { error: error instanceof Error ? error.message : 'Unknown', function: 'sendBookingConfirmation' });
+    return false;
   }
 }
 
-export async function sendVerificationEmail(email: string, token: string, fullName: string): Promise<void> {
+export async function sendVerificationEmail(email: string, token: string, fullName: string): Promise<boolean> {
   if (!process.env.RESEND_API_KEY) {
-    console.log('RESEND_API_KEY not set, skipping verification email');
-    return;
+    log('warn', 'RESEND_API_KEY not set, skipping verification email', { function: 'sendVerificationEmail' });
+    return false;
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zyphonsystems.com';
@@ -171,16 +178,18 @@ export async function sendVerificationEmail(email: string, token: string, fullNa
         </div>
       `,
     });
+    log('info', 'Verification email sent', { to: email, function: 'sendVerificationEmail' });
+    return true;
   } catch (error) {
-    console.error('Failed to send verification email:', error);
-    throw error;
+    log('error', 'Failed to send verification email', { error: error instanceof Error ? error.message : 'Unknown', function: 'sendVerificationEmail' });
+    return false;
   }
 }
 
-export async function sendCustomEmail(to: string, subject: string, body: string): Promise<void> {
+export async function sendCustomEmail(to: string, subject: string, body: string): Promise<boolean> {
   if (!process.env.RESEND_API_KEY) {
-    console.log('RESEND_API_KEY not set, skipping email');
-    return;
+    log('warn', 'RESEND_API_KEY not set, skipping email', { function: 'sendCustomEmail' });
+    return false;
   }
 
   try {
@@ -196,16 +205,18 @@ export async function sendCustomEmail(to: string, subject: string, body: string)
         </div>
       `,
     });
+    log('info', 'Custom email sent', { to, subject, function: 'sendCustomEmail' });
+    return true;
   } catch (error) {
-    console.error('Failed to send custom email:', error);
-    throw error;
+    log('error', 'Failed to send custom email', { error: error instanceof Error ? error.message : 'Unknown', function: 'sendCustomEmail' });
+    return false;
   }
 }
 
-export async function sendPasswordResetEmail(email: string, token: string, fullName: string): Promise<void> {
+export async function sendPasswordResetEmail(email: string, token: string, fullName: string): Promise<boolean> {
   if (!process.env.RESEND_API_KEY) {
-    console.log('RESEND_API_KEY not set, skipping password reset email');
-    return;
+    log('warn', 'RESEND_API_KEY not set, skipping password reset email', { function: 'sendPasswordResetEmail' });
+    return false;
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zyphonsystems.com';
@@ -232,8 +243,10 @@ export async function sendPasswordResetEmail(email: string, token: string, fullN
         </div>
       `,
     });
+    log('info', 'Password reset email sent', { to: email, function: 'sendPasswordResetEmail' });
+    return true;
   } catch (error) {
-    console.error('Failed to send password reset email:', error);
-    throw error;
+    log('error', 'Failed to send password reset email', { error: error instanceof Error ? error.message : 'Unknown', function: 'sendPasswordResetEmail' });
+    return false;
   }
 }

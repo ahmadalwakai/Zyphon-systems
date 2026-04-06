@@ -117,10 +117,10 @@ async function generate() {
   doc.moveDown(1);
 
   const contacts = [
-    { label: 'Email', value: 'hello@zyphon.systems' },
-    { label: 'Website', value: 'https://zyphon.systems' },
-    { label: 'LinkedIn', value: 'linkedin.com/company/zyphon' },
-    { label: 'GitHub', value: 'github.com/zyphon' },
+    { label: 'Email', value: 'hello@zyphonsystems.com' },
+    { label: 'Website', value: 'https://zyphonsystems.com' },
+    { label: 'LinkedIn', value: 'linkedin.com/company/zyphon-systems' },
+    { label: 'GitHub', value: 'github.com/ahmadalwakai/Zyphon-systems' },
   ];
 
   contacts.forEach((c) => {

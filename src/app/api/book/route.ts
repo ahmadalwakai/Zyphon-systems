@@ -51,9 +51,11 @@ export async function POST(request: NextRequest) {
     const booking = await createBooking(sanitizedData);
 
     // Send email notifications (non-blocking)
+    let notificationSent = false;
+    let confirmationSent = false;
     try {
       const { sendBookingNotification, sendBookingConfirmation } = await import('@/lib/email');
-      await Promise.all([
+      const [notifResult, confResult] = await Promise.all([
         sendBookingNotification({
           full_name: sanitizedData.fullName,
           email: sanitizedData.email,
@@ -68,16 +70,17 @@ export async function POST(request: NextRequest) {
           preferred_time: sanitizedData.preferredTime || 'Not specified',
         }),
       ]);
+      notificationSent = notifResult;
+      confirmationSent = confResult;
     } catch (emailError) {
-      console.error('Email notification error:', emailError);
-      // Don't fail the request if email fails
+      log('error', 'Email notification error', { error: emailError instanceof Error ? emailError.message : 'Unknown', route: '/api/book' });
     }
 
-    log('info', 'New booking received', { id: booking.id, email: sanitizedData.email, route: '/api/book' });
+    log('info', 'New booking received', { id: booking.id, email: sanitizedData.email, notificationSent, confirmationSent, route: '/api/book' });
     await logActivity('system', 'booking_received', 'booking', booking.id, { from: sanitizedData.email });
 
     return NextResponse.json(
-      { success: true, data: { id: booking.id } },
+      { success: true, data: { id: booking.id }, notificationSent, confirmationSent },
       { status: 201 }
     );
   } catch (error) {
