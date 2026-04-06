@@ -6,7 +6,7 @@ import { getPosts } from '@/lib/db';
 import { FileText } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Insights | Zyphon Systems',
+  title: 'Insights',
   description: 'Articles on product engineering, mobile app development, system architecture, and digital platform strategy.',
 };
 

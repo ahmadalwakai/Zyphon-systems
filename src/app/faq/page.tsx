@@ -5,7 +5,7 @@ import { FAQHero } from '@/components/faq/FAQHero';
 import { FAQAccordion } from '@/components/faq/FAQAccordion';
 
 export const metadata: Metadata = {
-  title: 'FAQ | Zyphon Systems',
+  title: 'FAQ',
   description: 'Frequently asked questions about our mobile app development, admin panel, backend, and full platform services.',
 };
 

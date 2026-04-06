@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Box } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
@@ -12,6 +13,14 @@ interface ZyphonLogoProps {
 }
 
 export function ZyphonLogo({ size = 40, animated = true }: ZyphonLogoProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const shouldAnimate = animated && mounted;
+
   const pathVariants = {
     hidden: {
       pathLength: 0,
@@ -50,8 +59,8 @@ export function ZyphonLogo({ size = 40, animated = true }: ZyphonLogoProps) {
         height={size}
         viewBox="0 0 48 48"
         fill="none"
-        initial={animated ? 'hidden' : 'visible'}
-        animate={animated ? ['visible', 'glow'] : 'visible'}
+        initial={shouldAnimate ? 'hidden' : 'visible'}
+        animate={shouldAnimate ? ['visible', 'glow'] : 'visible'}
         variants={glowVariants}
       >
         {/* Outer frame / circuit border */}
@@ -62,7 +71,9 @@ export function ZyphonLogo({ size = 40, animated = true }: ZyphonLogoProps) {
           strokeLinecap="round"
           strokeLinejoin="round"
           fill="none"
-          variants={pathVariants}
+          variants={shouldAnimate ? pathVariants : undefined}
+          initial={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
+          animate={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
         />
         
         {/* Stylized Z mark - angular/circuit-like design */}
@@ -73,7 +84,9 @@ export function ZyphonLogo({ size = 40, animated = true }: ZyphonLogoProps) {
           strokeLinecap="round"
           strokeLinejoin="round"
           fill="none"
-          variants={pathVariants}
+          variants={shouldAnimate ? pathVariants : undefined}
+          initial={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
+          animate={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
         />
         
         {/* Circuit nodes/dots at corners */}
@@ -83,7 +96,9 @@ export function ZyphonLogo({ size = 40, animated = true }: ZyphonLogoProps) {
           strokeWidth="4"
           strokeLinecap="round"
           fill="none"
-          variants={pathVariants}
+          variants={shouldAnimate ? pathVariants : undefined}
+          initial={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
+          animate={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
         />
         
         {/* Inner detail lines for circuit feel */}
@@ -94,7 +109,9 @@ export function ZyphonLogo({ size = 40, animated = true }: ZyphonLogoProps) {
           strokeLinecap="round"
           fill="none"
           opacity={0.6}
-          variants={pathVariants}
+          variants={shouldAnimate ? pathVariants : undefined}
+          initial={shouldAnimate ? undefined : { pathLength: 1, opacity: 0.6 }}
+          animate={shouldAnimate ? undefined : { pathLength: 1, opacity: 0.6 }}
         />
 
         <defs>

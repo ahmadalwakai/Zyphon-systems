@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const post = await getPostBySlug(slug, true);
     if (!post) return { title: 'Post Not Found' };
     return {
-      title: `${post.title} | Zyphon Systems`,
+      title: post.title,
       description: post.excerpt,
       openGraph: {
         title: post.title,

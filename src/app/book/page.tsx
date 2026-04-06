@@ -4,7 +4,7 @@ import { BookingHero } from '@/components/book/BookingHero';
 import { BookingForm } from '@/components/book/BookingForm';
 
 export const metadata: Metadata = {
-  title: 'Book a Meeting | Zyphon Systems',
+  title: 'Book a Meeting',
   description: 'Schedule a discovery meeting to discuss your mobile app, admin panel, or digital platform project.',
 };
 

@@ -3,6 +3,7 @@
 import { Box, Heading, Text, VStack, HStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { Mail, MessageCircle } from 'lucide-react';
+import { contactInfo } from '@/data/contact';
 
 const LinkedinIcon = ({ size = 20 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
@@ -23,26 +24,26 @@ const contactDetails = [
   {
     icon: Mail,
     label: 'Email',
-    value: 'hello@zyphon.systems',
-    href: 'mailto:hello@zyphon.systems',
+    value: contactInfo.email,
+    href: `mailto:${contactInfo.email}`,
   },
   {
     icon: MessageCircle,
     label: 'WhatsApp',
-    value: '+44 123 456 7890',
-    href: 'https://wa.me/441234567890',
+    value: contactInfo.phone,
+    href: contactInfo.whatsappUrl,
   },
   {
     icon: LinkedinIcon,
     label: 'LinkedIn',
     value: 'Zyphon Systems',
-    href: 'https://linkedin.com/company/zyphon',
+    href: contactInfo.linkedinUrl,
   },
   {
     icon: GithubIcon,
     label: 'GitHub',
-    value: '@zyphon',
-    href: 'https://github.com/zyphon',
+    value: '@ahmadalwakai',
+    href: contactInfo.githubUrl,
   },
 ];
 

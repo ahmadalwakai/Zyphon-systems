@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const project = staticProjects.find((p) => p.slug === slug);
   if (!project) return { title: 'Project Not Found' };
   return {
-    title: `${project.title} — Case Study | Zyphon Systems`,
+    title: `${project.title} — Case Study`,
     description: project.description,
   };
 }

@@ -5,7 +5,7 @@ import { SolutionCard } from '@/components/solutions/SolutionCard';
 import { SolutionsCTA } from '@/components/solutions/SolutionsCTA';
 
 export const metadata: Metadata = {
-  title: 'Solutions | Zyphon Systems',
+  title: 'Solutions',
   description: 'We build digital systems around real business operations — booking platforms, hospitality systems, multi-branch platforms, and more.',
 };
 

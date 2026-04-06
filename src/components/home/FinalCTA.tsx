@@ -46,7 +46,7 @@ export function FinalCTA() {
                 gap={4}
                 justify="center"
               >
-                <Link href="/contact">
+                <Link href="/book">
                   <Button
                     size="lg"
                     bg="primary.500"

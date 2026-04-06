@@ -4,6 +4,7 @@ import { Box, Container, Flex, Grid, HStack, VStack, Text } from '@chakra-ui/rea
 import Link from 'next/link';
 import { ZyphonLogo } from '@/components/brand/ZyphonLogo';
 import { footerNavigation } from '@/data/navigation';
+import { contactInfo } from '@/data/contact';
 import { Mail, Phone } from 'lucide-react';
 
 const LinkedinIcon = () => (
@@ -47,7 +48,7 @@ export function Footer() {
               Product Engineering for Modern Businesses
             </Text>
             <HStack gap={4} pt={2}>
-              <Link href="mailto:hello@zyphon.systems">
+              <Link href={`mailto:${contactInfo.email}`}>
                 <Box
                   p={2}
                   borderRadius="lg"
@@ -59,7 +60,7 @@ export function Footer() {
                   <Mail size={18} />
                 </Box>
               </Link>
-              <Link href="https://linkedin.com/company/zyphon" target="_blank">
+              <Link href={contactInfo.linkedinUrl} target="_blank">
                 <Box
                   p={2}
                   borderRadius="lg"
@@ -71,7 +72,7 @@ export function Footer() {
                   <LinkedinIcon />
                 </Box>
               </Link>
-              <Link href="https://github.com/zyphon" target="_blank">
+              <Link href={contactInfo.githubUrl} target="_blank">
                 <Box
                   p={2}
                   borderRadius="lg"
@@ -151,13 +152,13 @@ export function Footer() {
               <HStack gap={3}>
                 <Mail size={16} color="#a1a1aa" />
                 <Text fontSize="sm" color={{ base: 'gray.600', _dark: 'gray.400' }}>
-                  hello@zyphon.systems
+                  {contactInfo.email}
                 </Text>
               </HStack>
               <HStack gap={3}>
                 <Phone size={16} color="#a1a1aa" />
                 <Text fontSize="sm" color={{ base: 'gray.600', _dark: 'gray.400' }}>
-                  +44 (0) 123 456 7890
+                  {contactInfo.phone}
                 </Text>
               </HStack>
             </VStack>
