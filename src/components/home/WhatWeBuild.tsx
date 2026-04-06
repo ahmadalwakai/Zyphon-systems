@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Container, Grid, Heading, Text, VStack, Icon } from '@chakra-ui/react';
+import { Box, Container, Grid, Heading, Text, VStack } from '@chakra-ui/react';
 import { Smartphone, LayoutDashboard, Server, Layers } from 'lucide-react';
 import { motion } from 'framer-motion';
 

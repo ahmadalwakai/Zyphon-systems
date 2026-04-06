@@ -3,7 +3,6 @@
 import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
-const MotionBox = motion.create(Box);
 const MotionHeading = motion.create(Heading);
 const MotionText = motion.create(Text);
 

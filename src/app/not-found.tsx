@@ -41,7 +41,7 @@ export default function NotFound() {
               color={{ base: 'gray.600', _dark: 'gray.400' }}
               maxW="md"
             >
-              This page doesn't exist or has been moved.
+              This page doesn&apos;t exist or has been moved.
             </Text>
             <Link href="/">
               <Button

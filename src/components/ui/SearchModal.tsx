@@ -64,6 +64,8 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   useEffect(() => {
     if (isOpen) {
+      // Reset state when modal opens — intentional sync from prop change
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setQuery('');
       setResults([]);
       setTimeout(() => inputRef.current?.focus(), 100);

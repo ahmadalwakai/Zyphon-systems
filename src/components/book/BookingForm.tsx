@@ -177,7 +177,7 @@ export function BookingForm() {
               Thank you!
             </Heading>
             <Text color={{ base: 'gray.600', _dark: 'gray.400' }}>
-              We'll confirm your meeting within 24 hours.
+              We&apos;ll confirm your meeting within 24 hours.
             </Text>
           </VStack>
         </Box>

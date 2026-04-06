@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Container, Flex, Heading, Text, HStack, VStack, Button } from '@chakra-ui/react';
+import { Box, Container, Flex, Heading, Text, VStack, Button } from '@chakra-ui/react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 

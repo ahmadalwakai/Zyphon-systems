@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Container, Heading, Text, VStack, List } from '@chakra-ui/react';
+import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
 

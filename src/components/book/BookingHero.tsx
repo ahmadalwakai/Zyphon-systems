@@ -28,7 +28,7 @@ export function BookingHero() {
           color={{ base: 'gray.600', _dark: 'gray.400' }}
           maxW="2xl"
         >
-          The best starting point is a structured conversation. Let's review your idea, 
+          The best starting point is a structured conversation. Let&apos;s review your idea, 
           your current workflow, and the right execution path.
         </Text>
       </VStack>

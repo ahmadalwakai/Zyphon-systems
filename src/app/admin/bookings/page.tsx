@@ -9,7 +9,6 @@ import {
   HStack, 
   Badge, 
   Button,
-  Table,
   Spinner,
   Flex
 } from '@chakra-ui/react';

@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { StatsCard } from '@/components/admin/StatsCard';
 import { InquiryChart } from '@/components/admin/InquiryChart';
 import { ActivityFeed } from '@/components/admin/ActivityFeed';
-import { MessageSquare, MessageSquarePlus, CalendarDays, FolderKanban, FileText, Users, ArrowRight, Download } from 'lucide-react';
+import { MessageSquare, MessageSquarePlus, CalendarDays, FileText, Users, ArrowRight, Download } from 'lucide-react';
 import Link from 'next/link';
 
 const MotionBox = motion.create(Box);

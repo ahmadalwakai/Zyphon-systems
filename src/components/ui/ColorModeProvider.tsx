@@ -24,6 +24,8 @@ export function ColorModeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const stored = localStorage.getItem('zyphon-color-mode') as ColorMode | null;
     if (stored === 'light' || stored === 'dark') {
+      // Using flushSync-equivalent pattern: apply DOM changes and sync state from external storage
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setColorMode(stored);
       document.documentElement.classList.toggle('dark', stored === 'dark');
       document.documentElement.classList.toggle('light', stored === 'light');
