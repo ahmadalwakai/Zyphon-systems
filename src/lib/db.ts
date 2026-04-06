@@ -1,6 +1,10 @@
-import { neon } from '@neondatabase/serverless';
+import { neon, NeonQueryFunction } from '@neondatabase/serverless';
 
-export const sql = neon(process.env.DATABASE_URL!);
+// Guard: during CI builds DATABASE_URL may not exist.
+// Create a stub that throws only if actually invoked at runtime.
+export const sql: NeonQueryFunction<false, false> = process.env.DATABASE_URL
+  ? neon(process.env.DATABASE_URL)
+  : ((() => { throw new Error('DATABASE_URL is not configured'); }) as unknown as NeonQueryFunction<false, false>);
 
 let dbInitialized = false;
 
