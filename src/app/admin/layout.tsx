@@ -6,6 +6,7 @@ import { AdminSidebar } from '@/components/admin/AdminSidebar';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -36,13 +37,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (res.ok) {
         setIsAuthenticated(true);
       } else {
-        setError('Invalid password');
+        setError('Invalid credentials');
       }
     } catch {
       setError('Authentication failed');
@@ -90,7 +91,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 Admin Login
               </Heading>
               <Text color="gray.400" fontSize="sm">
-                Enter the admin password to continue
+                Enter your credentials to continue
               </Text>
             </VStack>
 
@@ -108,6 +109,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </Text>
               </Box>
             )}
+
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              bg="gray.800"
+              borderColor="gray.600"
+              color="white"
+              _placeholder={{ color: 'gray.500' }}
+              _focus={{
+                borderColor: 'primary.500',
+                boxShadow: '0 0 0 1px var(--chakra-colors-primary-500)',
+              }}
+            />
 
             <Input
               type="password"
