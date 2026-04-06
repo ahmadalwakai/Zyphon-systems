@@ -16,6 +16,7 @@ export function ZyphonLogo({ size = 40, animated = true }: ZyphonLogoProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Intentional: detect client hydration for animation
     setMounted(true);
   }, []);
 
