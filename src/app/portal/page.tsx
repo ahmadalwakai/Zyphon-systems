@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Box, Container, Heading, Text, VStack, SimpleGrid, Badge, Flex, Spinner } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { Mail, Calendar, Clock, Building } from 'lucide-react';
+import { Mail, Calendar, Clock, Building, UserCog } from 'lucide-react';
+import Link from 'next/link';
 
 interface Customer {
   id: number;
@@ -99,6 +100,21 @@ export default function PortalDashboard() {
             )}
             {customer?.email}
           </Text>
+          <Link href="/portal/profile">
+            <Flex
+              align="center"
+              gap={2}
+              mt={3}
+              color="primary.500"
+              fontSize="sm"
+              fontWeight="medium"
+              _hover={{ color: 'primary.600' }}
+              transition="color 0.2s"
+            >
+              <UserCog size={16} />
+              Edit Profile
+            </Flex>
+          </Link>
         </MotionBox>
 
         {/* Stats */}

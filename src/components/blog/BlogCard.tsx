@@ -3,6 +3,7 @@
 import { Box, Heading, Text, VStack, HStack, Badge } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const MotionBox = motion.create(Box);
 
@@ -45,12 +46,24 @@ export function BlogCard({ slug, title, excerpt, tags, publishedAt, coverImageUr
           transition="all 0.3s ease-in-out"
         >
           {/* Cover Image or Gradient Placeholder */}
-          <Box
-            h="180px"
-            bg={coverImageUrl ? `url(${coverImageUrl})` : 'linear-gradient(135deg, #0d9488 0%, #4f46e5 100%)'}
-            backgroundSize="cover"
-            backgroundPosition="center"
-          />
+          {coverImageUrl && coverImageUrl.startsWith('/uploads/') ? (
+            <Box h="180px" position="relative" overflow="hidden">
+              <Image
+                src={coverImageUrl}
+                alt={title}
+                width={600}
+                height={340}
+                style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+              />
+            </Box>
+          ) : (
+            <Box
+              h="180px"
+              bg={coverImageUrl ? `url(${coverImageUrl})` : 'linear-gradient(135deg, #0d9488 0%, #4f46e5 100%)'}
+              backgroundSize="cover"
+              backgroundPosition="center"
+            />
+          )}
 
           <VStack align="start" gap={3} p={6}>
             <HStack gap={2} flexWrap="wrap">

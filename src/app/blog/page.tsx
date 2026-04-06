@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: 'Articles on product engineering, mobile app development, system architecture, and digital platform strategy.',
 };
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export default async function BlogPage() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

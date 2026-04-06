@@ -124,6 +124,23 @@ export async function initializeDatabase() {
       ALTER TABLE projects ADD COLUMN IF NOT EXISTS testimonial_author TEXT
     `;
 
+    // Add reset token columns to customers
+    await sql`ALTER TABLE customers ADD COLUMN IF NOT EXISTS reset_token VARCHAR(255)`;
+    await sql`ALTER TABLE customers ADD COLUMN IF NOT EXISTS reset_token_expires TIMESTAMP`;
+
+    // Create activity_log table
+    await sql`
+      CREATE TABLE IF NOT EXISTS activity_log (
+        id SERIAL PRIMARY KEY,
+        actor VARCHAR(50) NOT NULL,
+        action VARCHAR(100) NOT NULL,
+        entity_type VARCHAR(50) NOT NULL,
+        entity_id VARCHAR(50),
+        details JSONB,
+        created_at TIMESTAMP DEFAULT NOW()
+      )
+    `;
+
     console.log('Database tables initialized successfully');
     return { success: true };
   } catch (error) {
@@ -511,4 +528,84 @@ export async function getAnalytics() {
     inquiriesByMonth,
     recentActivity,
   };
+}
+
+// Password reset operations
+export async function setResetToken(email: string, token: string, expires: Date) {
+  await ensureDbInitialized();
+  const result = await sql`
+    UPDATE customers SET reset_token = ${token}, reset_token_expires = ${expires.toISOString()}
+    WHERE email = ${email}
+    RETURNING id
+  `;
+  return result[0];
+}
+
+export async function getCustomerByResetToken(token: string) {
+  await ensureDbInitialized();
+  const result = await sql`
+    SELECT * FROM customers WHERE reset_token = ${token} AND reset_token_expires > NOW()
+  `;
+  return result[0];
+}
+
+export async function resetCustomerPassword(customerId: number, passwordHash: string) {
+  await ensureDbInitialized();
+  await sql`
+    UPDATE customers SET password_hash = ${passwordHash}, reset_token = NULL, reset_token_expires = NULL
+    WHERE id = ${customerId}
+  `;
+}
+
+export async function updateCustomerProfile(id: number, data: { fullName?: string; companyName?: string }) {
+  await ensureDbInitialized();
+  const result = await sql`
+    UPDATE customers SET
+      full_name = COALESCE(${data.fullName ?? null}, full_name),
+      company_name = COALESCE(${data.companyName ?? null}, company_name)
+    WHERE id = ${id}
+    RETURNING id, email, full_name, company_name, is_verified, created_at
+  `;
+  return result[0];
+}
+
+export async function updateCustomerPassword(id: number, passwordHash: string) {
+  await ensureDbInitialized();
+  await sql`UPDATE customers SET password_hash = ${passwordHash} WHERE id = ${id}`;
+}
+
+export async function getCustomerFullById(id: number) {
+  await ensureDbInitialized();
+  const result = await sql`SELECT * FROM customers WHERE id = ${id}`;
+  return result[0];
+}
+
+// Customer export (no password_hash)
+export async function getAllCustomers() {
+  await ensureDbInitialized();
+  return await sql`SELECT id, email, full_name, company_name, is_verified, created_at FROM customers ORDER BY created_at DESC`;
+}
+
+// Activity log queries
+export async function getActivityLog(page: number = 1, actor?: string) {
+  await ensureDbInitialized();
+  const limit = 50;
+  const offset = (page - 1) * limit;
+
+  let items;
+  let countResult;
+
+  if (actor && actor !== 'all') {
+    items = await sql`
+      SELECT * FROM activity_log WHERE actor = ${actor} ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}
+    `;
+    countResult = await sql`SELECT COUNT(*) as count FROM activity_log WHERE actor = ${actor}`;
+  } else {
+    items = await sql`
+      SELECT * FROM activity_log ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}
+    `;
+    countResult = await sql`SELECT COUNT(*) as count FROM activity_log`;
+  }
+
+  return { items, total: Number(countResult[0].count) };
 }

@@ -1,12 +1,17 @@
 import { notFound } from 'next/navigation';
 import { Box, Container, Heading, Text, VStack, HStack, Badge, SimpleGrid, Flex } from '@chakra-ui/react';
 import { staticProjects } from '@/data/projects';
+import { JsonLd } from '@/components/seo/JsonLd';
 import Link from 'next/link';
 import { ArrowLeft, Quote } from 'lucide-react';
 import type { Metadata } from 'next';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export function generateStaticParams() {
+  return staticProjects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -25,9 +30,18 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
   if (!project) notFound();
 
+  const projectSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: project.title,
+    description: project.description,
+    creator: { '@type': 'Organization', name: 'Zyphon Systems' },
+  };
+
   return (
     <Box py={{ base: 16, md: 24 }}>
       <Container maxW="4xl">
+        <JsonLd data={projectSchema} />
         <VStack gap={12} align="stretch">
           {/* Back link */}
           <Link href="/projects">

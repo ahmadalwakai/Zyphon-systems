@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getPosts, createPost } from '@/lib/db';
 import { verifyAdminSession } from '@/lib/auth';
 import { slugify } from '@/lib/utils';
+import { validateOrigin } from '@/lib/csrf';
+import { log } from '@/lib/logger';
+import { logActivity } from '@/lib/activity';
 
 export async function GET(request: NextRequest) {
   if (!await verifyAdminSession(request)) {
@@ -12,12 +15,16 @@ export async function GET(request: NextRequest) {
     const posts = await getPosts(false);
     return NextResponse.json({ posts });
   } catch (error) {
-    console.error('Error fetching posts:', error);
+    log('error', 'Error fetching posts', { error: error instanceof Error ? error.message : 'Unknown', route: '/api/admin/posts' });
     return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
+  if (!validateOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   if (!await verifyAdminSession(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -42,9 +49,14 @@ export async function POST(request: NextRequest) {
       isPublished: isPublished ?? false,
     });
 
+    if (isPublished) {
+      await logActivity('admin', 'post_published', 'post', post.id, { slug });
+    }
+    log('info', 'Post created', { id: post.id, slug, route: '/api/admin/posts' });
+
     return NextResponse.json({ post }, { status: 201 });
   } catch (error) {
-    console.error('Error creating post:', error);
+    log('error', 'Error creating post', { error: error instanceof Error ? error.message : 'Unknown', route: '/api/admin/posts' });
     return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
   }
 }

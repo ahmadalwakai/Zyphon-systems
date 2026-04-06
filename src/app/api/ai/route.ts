@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { askGroq } from '@/lib/groq';
 import { verifyAdminSession } from '@/lib/auth';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { validateOrigin } from '@/lib/csrf';
+import { log } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
   try {
+    if (!validateOrigin(request)) {
+      return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 });
+    }
+
     const ip = request.headers.get('x-forwarded-for') || 'unknown';
     if (!await checkRateLimit(ip, 'ai', 5, 'minute')) {
       return NextResponse.json({ success: false, error: 'Too many requests.' }, { status: 429 });
@@ -38,7 +44,7 @@ export async function POST(request: NextRequest) {
       data: { response },
     });
   } catch (error) {
-    console.error('AI API error:', error);
+    log('error', 'AI API error', { error: error instanceof Error ? error.message : 'Unknown', route: '/api/ai' });
     return NextResponse.json(
       { success: false, error: 'Failed to generate AI response' },
       { status: 500 }

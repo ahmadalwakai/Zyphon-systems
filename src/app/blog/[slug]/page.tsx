@@ -2,12 +2,26 @@ import type { Metadata } from 'next';
 import { Container, Box, Text, VStack, HStack, Badge } from '@chakra-ui/react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getPostBySlug, getRelatedPosts } from '@/lib/db';
+import Image from 'next/image';
+import { getPostBySlug, getRelatedPosts, getPosts } from '@/lib/db';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { ArrowLeft } from 'lucide-react';
 
+export const revalidate = 3600;
+
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  try {
+    const posts = await getPosts(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return posts.map((p: any) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -49,6 +63,21 @@ export default async function BlogPostPage({ params }: PageProps) {
     year: 'numeric',
   }).format(new Date(post.published_at));
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    author: { '@type': 'Person', name: post.author },
+    datePublished: post.published_at,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Zyphon Systems',
+      url: 'https://zyphon.dev',
+    },
+    ...(post.cover_image_url && { image: post.cover_image_url }),
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let relatedPosts: any[] = [];
   try {
@@ -59,6 +88,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <Container maxW="4xl" py={{ base: 24, md: 32 }}>
+      <JsonLd data={articleSchema} />
       <Link href="/blog">
         <HStack
           gap={2}
@@ -105,6 +135,32 @@ export default async function BlogPostPage({ params }: PageProps) {
           <Text>{formattedDate}</Text>
         </HStack>
       </VStack>
+
+      {post.cover_image_url && (
+        <Box
+          borderRadius="xl"
+          overflow="hidden"
+          mb={12}
+          maxH="480px"
+        >
+          {post.cover_image_url.startsWith('/uploads/') ? (
+            <Image
+              src={post.cover_image_url}
+              alt={post.title}
+              width={1200}
+              height={480}
+              style={{ objectFit: 'cover', width: '100%', maxHeight: '480px' }}
+            />
+          ) : (
+            <Box
+              h="400px"
+              bg={`url(${post.cover_image_url})`}
+              backgroundSize="cover"
+              backgroundPosition="center"
+            />
+          )}
+        </Box>
+      )}
 
       <Box
         className="blog-content"

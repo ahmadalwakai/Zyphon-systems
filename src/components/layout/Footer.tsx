@@ -24,6 +24,8 @@ export function Footer() {
   return (
     <Box
       as="footer"
+      role="contentinfo"
+      aria-label="Site footer"
       bg={{ base: 'gray.50', _dark: '#080810' }}
       borderTopWidth="1px"
       borderColor={{ base: 'gray.200', _dark: 'whiteAlpha.100' }}

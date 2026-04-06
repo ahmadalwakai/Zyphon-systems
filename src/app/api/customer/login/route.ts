@@ -3,8 +3,15 @@ import { cookies } from 'next/headers';
 import { getCustomerByEmail } from '@/lib/db';
 import { verifyCustomerPassword, createCustomerSession, CUSTOMER_COOKIE_NAME } from '@/lib/customer-auth';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { sanitizeEmail } from '@/lib/sanitize';
+import { validateOrigin } from '@/lib/csrf';
+import { log } from '@/lib/logger';
 
 export async function POST(request: NextRequest) {
+  if (!validateOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   const ip = request.headers.get('x-forwarded-for') || 'unknown';
   const allowed = await checkRateLimit(ip, 'customer-login', 10, 'minute');
   if (!allowed) {
@@ -19,7 +26,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    const customer = await getCustomerByEmail(email.toLowerCase());
+    const customer = await getCustomerByEmail(sanitizeEmail(email));
     if (!customer) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
     }
@@ -54,7 +61,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Login error:', error);
+    log('error', 'Login error', { error: error instanceof Error ? error.message : 'Unknown', route: '/api/customer/login' });
     return NextResponse.json({ error: 'Login failed' }, { status: 500 });
   }
 }

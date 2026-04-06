@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { StatsCard } from '@/components/admin/StatsCard';
 import { InquiryChart } from '@/components/admin/InquiryChart';
 import { ActivityFeed } from '@/components/admin/ActivityFeed';
-import { MessageSquare, MessageSquarePlus, CalendarDays, FolderKanban, FileText, Users, ArrowRight } from 'lucide-react';
+import { MessageSquare, MessageSquarePlus, CalendarDays, FolderKanban, FileText, Users, ArrowRight, Download } from 'lucide-react';
 import Link from 'next/link';
 
 const MotionBox = motion.create(Box);
@@ -142,6 +142,47 @@ export default function AdminDashboard() {
                 <ArrowRight size={14} color="#71717a" />
               </Flex>
             </Link>
+          ))}
+        </SimpleGrid>
+      </MotionBox>
+
+      {/* Data Export */}
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.8 }}
+      >
+        <Text color="white" fontWeight="semibold" fontSize="lg" mb={4}>
+          Data Export
+        </Text>
+        <SimpleGrid columns={{ base: 1, sm: 3 }} gap={4}>
+          {[
+            { label: 'Export Inquiries', href: '/api/admin/export/inquiries' },
+            { label: 'Export Bookings', href: '/api/admin/export/bookings' },
+            { label: 'Export Customers', href: '/api/admin/export/customers' },
+          ].map((exp) => (
+            <a key={exp.href} href={exp.href} download>
+              <Flex
+                p={4}
+                borderRadius="xl"
+                borderWidth="1px"
+                borderColor="whiteAlpha.100"
+                bg="rgba(17, 17, 24, 0.7)"
+                align="center"
+                justify="space-between"
+                _hover={{ borderColor: 'primary.500', bg: 'whiteAlpha.50' }}
+                transition="all 0.2s"
+                cursor="pointer"
+              >
+                <HStack gap={3}>
+                  <Box color="teal.400">
+                    <Download size={18} />
+                  </Box>
+                  <Text color="white" fontSize="sm" fontWeight="medium">{exp.label}</Text>
+                </HStack>
+                <ArrowRight size={14} color="#71717a" />
+              </Flex>
+            </a>
           ))}
         </SimpleGrid>
       </MotionBox>

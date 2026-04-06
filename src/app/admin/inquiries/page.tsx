@@ -132,12 +132,27 @@ Keep the tone professional but warm. Use British English.`;
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <Heading as="h1" size="xl" color="white">
-          Inquiries
-        </Heading>
-        <Text color="gray.400" mt={2}>
-          Manage contact form submissions
-        </Text>
+        <HStack justify="space-between" align="start">
+          <Box>
+            <Heading as="h1" size="xl" color="white">
+              Inquiries
+            </Heading>
+            <Text color="gray.400" mt={2}>
+              Manage contact form submissions
+            </Text>
+          </Box>
+          <a href="/api/admin/export/inquiries" download>
+            <Button
+              size="sm"
+              variant="outline"
+              borderColor="primary.500"
+              color="primary.400"
+              _hover={{ bg: 'primary.500/10' }}
+            >
+              Export CSV
+            </Button>
+          </a>
+        </HStack>
       </MotionBox>
 
       <InquiryTable

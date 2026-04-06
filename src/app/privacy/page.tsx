@@ -124,6 +124,64 @@ export default function PrivacyPage() {
                 </VStack>
               </Section>
 
+              <Section title="GDPR Compliance">
+                <Text>
+                  If you are located in the European Economic Area (EEA) or the United Kingdom,
+                  you have additional rights under the General Data Protection Regulation (GDPR):
+                </Text>
+                <VStack align="stretch" gap={2} mt={3}>
+                  <BulletPoint>
+                    <strong>Right to Erasure:</strong> You can request deletion of your personal data
+                    at any time by contacting us.
+                  </BulletPoint>
+                  <BulletPoint>
+                    <strong>Right to Restrict Processing:</strong> You can ask us to limit the use
+                    of your data.
+                  </BulletPoint>
+                  <BulletPoint>
+                    <strong>Right to Data Portability:</strong> You can request a copy of your data
+                    in a machine-readable format.
+                  </BulletPoint>
+                  <BulletPoint>
+                    <strong>Right to Withdraw Consent:</strong> Where processing is based on consent,
+                    you may withdraw it at any time.
+                  </BulletPoint>
+                  <BulletPoint>
+                    <strong>Right to Lodge a Complaint:</strong> You can file a complaint with the
+                    Information Commissioner&apos;s Office (ICO) or your local supervisory authority.
+                  </BulletPoint>
+                </VStack>
+              </Section>
+
+              <Section title="Cookies">
+                <Text>
+                  Our website uses essential cookies to ensure proper functionality. We display a
+                  cookie consent banner on first visit, allowing you to accept the use of cookies.
+                  Essential cookies do not track personal information and are required for the
+                  website to function correctly.
+                </Text>
+                <VStack align="stretch" gap={2} mt={3}>
+                  <BulletPoint>
+                    <strong>Essential Cookies:</strong> Required for site functionality (e.g.,
+                    session management, security tokens).
+                  </BulletPoint>
+                  <BulletPoint>
+                    <strong>Preference Cookies:</strong> Store your cookie consent preference
+                    (zyphon_cookie_consent).
+                  </BulletPoint>
+                </VStack>
+              </Section>
+
+              <Section title="Customer Portal">
+                <Text>
+                  When you register for our Customer Portal, we collect and store additional
+                  information including your full name, email address, company name, and hashed
+                  password. Your password is stored using industry-standard PBKDF2 hashing with
+                  100,000 iterations and is never stored in plain text. You can update your profile
+                  information and change your password through the portal at any time.
+                </Text>
+              </Section>
+
               <Section title="Contact Us">
                 <Text>
                   If you have any questions about this Privacy Policy or wish to exercise your

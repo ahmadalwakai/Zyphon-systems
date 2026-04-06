@@ -10,7 +10,8 @@ import {
   Badge, 
   Button,
   Table,
-  Spinner
+  Spinner,
+  Flex
 } from '@chakra-ui/react';
 import { CalendarDays, Clock, User, Mail, MessageSquare, Building2 } from 'lucide-react';
 
@@ -105,12 +106,22 @@ export default function BookingsPage() {
 
   return (
     <Box>
-      <Heading as="h1" size="2xl" color="white" mb={2}>
-        Meeting Bookings
-      </Heading>
-      <Text color="gray.400" mb={8}>
-        Manage consultation requests and meeting schedules
-      </Text>
+        <Flex justify="space-between" align="start" mb={2}>
+          <Heading as="h1" size="2xl" color="white">
+            Meeting Bookings
+          </Heading>
+          <a href="/api/admin/export/bookings" download>
+            <Button
+              size="sm"
+              variant="outline"
+              borderColor="primary.500"
+              color="primary.400"
+              _hover={{ bg: 'primary.500/10' }}
+            >
+              Export CSV
+            </Button>
+          </a>
+        </Flex>
 
       {bookings.length === 0 ? (
         <Box

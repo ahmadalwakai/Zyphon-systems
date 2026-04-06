@@ -3,8 +3,16 @@ import { createCustomer, getCustomerByEmail } from '@/lib/db';
 import { hashPassword } from '@/lib/customer-auth';
 import { sendVerificationEmail } from '@/lib/email';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { sanitizeString, sanitizeEmail, validateEmail } from '@/lib/sanitize';
+import { validateOrigin } from '@/lib/csrf';
+import { log } from '@/lib/logger';
+import { logActivity } from '@/lib/activity';
 
 export async function POST(request: NextRequest) {
+  if (!validateOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   const ip = request.headers.get('x-forwarded-for') || 'unknown';
   const allowed = await checkRateLimit(ip, 'customer-register', 3, 'minute');
   if (!allowed) {
@@ -19,7 +27,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Full name, email, and password are required' }, { status: 400 });
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!validateEmail(email)) {
       return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
@@ -27,7 +35,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Password must be at least 8 characters' }, { status: 400 });
     }
 
-    const existing = await getCustomerByEmail(email.toLowerCase());
+    const existing = await getCustomerByEmail(sanitizeEmail(email));
     if (existing) {
       return NextResponse.json({ error: 'An account with this email already exists' }, { status: 409 });
     }
@@ -36,9 +44,9 @@ export async function POST(request: NextRequest) {
     const verificationToken = crypto.randomUUID();
 
     const customer = await createCustomer({
-      email: email.toLowerCase().trim(),
-      fullName: fullName.trim().slice(0, 255),
-      companyName: companyName?.trim().slice(0, 255),
+      email: sanitizeEmail(email).slice(0, 255),
+      fullName: sanitizeString(fullName).slice(0, 255),
+      companyName: companyName ? sanitizeString(companyName).slice(0, 255) : undefined,
       passwordHash,
       verificationToken,
     });
@@ -49,9 +57,12 @@ export async function POST(request: NextRequest) {
       // Email send failure shouldn't block registration
     }
 
+    log('info', 'Customer registered', { id: customer.id, email: sanitizeEmail(email), route: '/api/customer/register' });
+    await logActivity('system', 'customer_registered', 'customer', customer.id, { email: sanitizeEmail(email) });
+
     return NextResponse.json({ success: true, customer }, { status: 201 });
   } catch (error) {
-    console.error('Registration error:', error);
+    log('error', 'Registration error', { error: error instanceof Error ? error.message : 'Unknown', route: '/api/customer/register' });
     return NextResponse.json({ error: 'Registration failed' }, { status: 500 });
   }
 }

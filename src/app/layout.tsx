@@ -4,6 +4,8 @@ import { Providers } from './providers';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { SmartBackground } from '@/components/ui/SmartBackground';
+import { CookieConsent } from '@/components/ui/CookieConsent';
+import { SkipToContent } from '@/components/ui/SkipToContent';
 import './globals.css';
 
 const inter = Inter({
@@ -19,6 +21,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://zyphon.dev'),
   title: {
     default: 'Zyphon Systems — Production-Ready Mobile Apps, Admin Panels & Digital Platforms',
     template: '%s | Zyphon Systems',
@@ -43,6 +46,15 @@ export const metadata: Metadata = {
     description:
       'We build production-ready mobile apps, admin panels, backend systems, and scalable digital platforms for modern businesses.',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Zyphon Systems — Product Engineering for Modern Businesses',
+    description:
+      'We build production-ready mobile apps, admin panels, backend systems, and scalable digital platforms for modern businesses.',
+  },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function RootLayout({
@@ -54,10 +66,12 @@ export default function RootLayout({
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <body>
         <Providers>
+          <SkipToContent />
           <SmartBackground />
           <Navbar />
-          <main style={{ flex: 1, minHeight: '100vh' }}>{children}</main>
+          <main id="main-content" style={{ flex: 1, minHeight: '100vh' }}>{children}</main>
           <Footer />
+          <CookieConsent />
         </Providers>
       </body>
     </html>

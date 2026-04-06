@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Container, VStack } from '@chakra-ui/react';
+import { JsonLd } from '@/components/seo/JsonLd';
 import { FAQHero } from '@/components/faq/FAQHero';
 import { FAQAccordion } from '@/components/faq/FAQAccordion';
 
@@ -51,9 +52,23 @@ const faqItems = [
   },
 ];
 
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+
 export default function FAQPage() {
   return (
     <Container maxW="4xl" py={{ base: 16, md: 24 }}>
+      <JsonLd data={faqSchema} />
       <VStack gap={{ base: 12, md: 16 }} align="stretch">
         <FAQHero />
         <FAQAccordion items={faqItems} />

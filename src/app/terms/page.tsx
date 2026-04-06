@@ -187,6 +187,38 @@ export default function TermsPage() {
                 </Text>
               </Section>
 
+              <Section title="Customer Portal">
+                <Text>
+                  By registering for the Zyphon Systems Customer Portal, you agree to:
+                </Text>
+                <VStack align="stretch" gap={2} mt={3}>
+                  <BulletPoint>
+                    Provide accurate and up-to-date information during registration
+                  </BulletPoint>
+                  <BulletPoint>
+                    Keep your login credentials secure and not share them with third parties
+                  </BulletPoint>
+                  <BulletPoint>
+                    Accept responsibility for all activity that occurs under your account
+                  </BulletPoint>
+                  <BulletPoint>
+                    Notify us immediately of any unauthorized access to your account
+                  </BulletPoint>
+                </VStack>
+                <Text mt={3}>
+                  We reserve the right to suspend or terminate portal accounts that violate these
+                  terms or are inactive for an extended period.
+                </Text>
+              </Section>
+
+              <Section title="Cookie Policy">
+                <Text>
+                  Our website uses essential cookies to provide core functionality. By continuing
+                  to use our website after accepting the cookie consent banner, you agree to our use
+                  of cookies as described in our Privacy Policy.
+                </Text>
+              </Section>
+
               <Section title="Contact Information">
                 <Text>
                   If you have any questions about these Terms of Service, please contact us at:

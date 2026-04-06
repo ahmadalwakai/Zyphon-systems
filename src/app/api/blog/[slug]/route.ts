@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getPostBySlug } from '@/lib/db';
+import { log } from '@/lib/logger';
 
 export async function GET(
   _request: Request,
@@ -13,9 +14,11 @@ export async function GET(
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ post });
+    return NextResponse.json({ post }, {
+      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' },
+    });
   } catch (error) {
-    console.error('Error fetching post:', error);
+    log('error', 'Error fetching post', { error: error instanceof Error ? error.message : 'Unknown', route: '/api/blog/[slug]' });
     return NextResponse.json({ error: 'Failed to fetch post' }, { status: 500 });
   }
 }

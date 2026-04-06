@@ -2,8 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminSession } from '@/lib/auth';
 import { sendCustomEmail } from '@/lib/email';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { validateOrigin } from '@/lib/csrf';
+import { log } from '@/lib/logger';
+import { logActivity } from '@/lib/activity';
 
 export async function POST(request: NextRequest) {
+  if (!validateOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   if (!await verifyAdminSession(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -26,10 +33,12 @@ export async function POST(request: NextRequest) {
     }
 
     await sendCustomEmail(to, subject.slice(0, 200), body.slice(0, 10000));
+    log('info', 'Email sent', { to, subject: subject.slice(0, 50), route: '/api/admin/send-email' });
+    await logActivity('admin', 'email_sent', 'email', undefined, { to, subject });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Send email error:', error);
+    log('error', 'Send email error', { error: error instanceof Error ? error.message : 'Unknown', route: '/api/admin/send-email' });
     return NextResponse.json({ error: 'Failed to send email' }, { status: 500 });
   }
 }

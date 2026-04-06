@@ -36,6 +36,7 @@ export function Navbar() {
     <>
       <MotionBox
         as="nav"
+        aria-label="Main navigation"
         position="fixed"
         top={0}
         left={0}

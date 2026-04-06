@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPostById, updatePost, deletePost } from '@/lib/db';
 import { verifyAdminSession } from '@/lib/auth';
+import { validateOrigin } from '@/lib/csrf';
+import { log } from '@/lib/logger';
+import { logActivity } from '@/lib/activity';
 
 export async function GET(
   request: NextRequest,
@@ -18,7 +21,7 @@ export async function GET(
     }
     return NextResponse.json({ post });
   } catch (error) {
-    console.error('Error fetching post:', error);
+    log('error', 'Error fetching post', { error: error instanceof Error ? error.message : 'Unknown', route: '/api/admin/posts/[id]' });
     return NextResponse.json({ error: 'Failed to fetch post' }, { status: 500 });
   }
 }
@@ -27,6 +30,10 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!validateOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   if (!await verifyAdminSession(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -50,9 +57,13 @@ export async function PUT(
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
+    if (isPublished) {
+      await logActivity('admin', 'post_published', 'post', id, { slug: post.slug });
+    }
+
     return NextResponse.json({ post });
   } catch (error) {
-    console.error('Error updating post:', error);
+    log('error', 'Error updating post', { error: error instanceof Error ? error.message : 'Unknown', route: '/api/admin/posts/[id]' });
     return NextResponse.json({ error: 'Failed to update post' }, { status: 500 });
   }
 }
@@ -61,6 +72,10 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!validateOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
   if (!await verifyAdminSession(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -68,9 +83,10 @@ export async function DELETE(
   try {
     const { id } = await params;
     await deletePost(parseInt(id, 10));
+    await logActivity('admin', 'post_deleted', 'post', id);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting post:', error);
+    log('error', 'Error deleting post', { error: error instanceof Error ? error.message : 'Unknown', route: '/api/admin/posts/[id]' });
     return NextResponse.json({ error: 'Failed to delete post' }, { status: 500 });
   }
 }

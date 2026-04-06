@@ -49,5 +49,6 @@ export const adminNavigation: NavItem[] = [
   { label: 'Projects', href: '/admin/projects' },
   { label: 'Posts', href: '/admin/posts' },
   { label: 'Compose', href: '/admin/compose' },
+  { label: 'Activity', href: '/admin/activity' },
   { label: 'Settings', href: '/admin/settings' },
 ];

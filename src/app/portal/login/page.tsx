@@ -1,14 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Box, Container, Heading, Text, VStack, Input, Button, Field } from '@chakra-ui/react';
 import Link from 'next/link';
 
-export default function PortalLoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const verified = searchParams.get('verified') === 'true';
+  const reset = searchParams.get('reset') === 'true';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -67,6 +68,12 @@ export default function PortalLoginPage() {
               </Box>
             )}
 
+            {reset && (
+              <Box w="full" p={3} borderRadius="lg" bg="green.500/10" borderWidth="1px" borderColor="green.500/30">
+                <Text color="green.400" fontSize="sm">Password reset successful. Please sign in.</Text>
+              </Box>
+            )}
+
             {error && (
               <Box w="full" p={3} borderRadius="lg" bg="red.500/10" borderWidth="1px" borderColor="red.500/30">
                 <Text color="red.400" fontSize="sm">{error}</Text>
@@ -112,6 +119,12 @@ export default function PortalLoginPage() {
               Sign In
             </Button>
 
+            <Link href="/portal/forgot-password">
+              <Text fontSize="sm" color="primary.500" _hover={{ textDecoration: 'underline' }}>
+                Forgot password?
+              </Text>
+            </Link>
+
             <Text fontSize="sm" color={{ base: 'gray.500', _dark: 'gray.400' }}>
               Don&apos;t have an account?{' '}
               <Link href="/portal/register">
@@ -122,5 +135,13 @@ export default function PortalLoginPage() {
         </Box>
       </Container>
     </Box>
+  );
+}
+
+export default function PortalLoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

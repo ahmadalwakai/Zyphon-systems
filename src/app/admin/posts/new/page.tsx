@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Box, Heading, Text, VStack, HStack, Input, Textarea, Button, Badge, Field } from '@chakra-ui/react';
 import { X } from 'lucide-react';
 import { slugify } from '@/lib/utils';
+import { ImageUploader } from '@/components/admin/ImageUploader';
 
 export default function NewPostPage() {
   const router = useRouter();
@@ -162,14 +163,10 @@ export default function NewPostPage() {
         </Field.Root>
 
         <Field.Root>
-          <Field.Label color="gray.300" fontSize="sm">Cover Image URL (optional)</Field.Label>
-          <Input
-            value={formData.coverImageUrl}
-            onChange={(e) => setFormData({ ...formData, coverImageUrl: e.target.value })}
-            placeholder="https://example.com/image.jpg"
-            bg="gray.800"
-            borderColor="gray.600"
-            color="white"
+          <Field.Label color="gray.300" fontSize="sm">Cover Image (optional)</Field.Label>
+          <ImageUploader
+            onUpload={(url) => setFormData({ ...formData, coverImageUrl: url })}
+            currentImage={formData.coverImageUrl || undefined}
           />
         </Field.Root>
 
