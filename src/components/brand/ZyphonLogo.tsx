@@ -22,35 +22,13 @@ export function ZyphonLogo({ size = 40, animated = true }: ZyphonLogoProps) {
 
   const shouldAnimate = animated && mounted;
 
-  const pathVariants = {
-    hidden: {
-      pathLength: 0,
-      opacity: 0,
-    },
-    visible: {
-      pathLength: 1,
-      opacity: 1,
-      transition: {
-        pathLength: {
-          duration: 1.5,
-          ease: 'easeInOut' as const,
-        },
-        opacity: {
-          duration: 0.3,
-        },
-      },
-    },
-  };
-
-  const glowVariants = {
-    glow: {
-      opacity: [0.8, 1, 0.8],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: 'easeInOut' as const,
-      },
-    },
+  // Static paths always visible - no conditional rendering, no loading states
+  // Animation is purely progressive enhancement after hydration
+  const staticPathProps = {
+    strokeWidth: '2',
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+    fill: 'none',
   };
 
   return (
@@ -60,59 +38,62 @@ export function ZyphonLogo({ size = 40, animated = true }: ZyphonLogoProps) {
         height={size}
         viewBox="0 0 48 48"
         fill="none"
-        initial={shouldAnimate ? 'hidden' : 'visible'}
-        animate={shouldAnimate ? ['visible', 'glow'] : 'visible'}
-        variants={glowVariants}
+        animate={shouldAnimate ? { opacity: [0.8, 1, 0.8] } : undefined}
+        transition={shouldAnimate ? { duration: 2, repeat: Infinity, ease: 'easeInOut' } : undefined}
       >
-        {/* Outer frame / circuit border */}
+        {/* Outer frame / circuit border - always visible */}
         <MotionPath
           d="M8 8 L40 8 L40 40 L8 40 Z"
           stroke="url(#gradient)"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-          variants={shouldAnimate ? pathVariants : undefined}
-          initial={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
-          animate={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
+          {...staticPathProps}
+          initial={{ pathLength: 1, opacity: 1 }}
+          animate={shouldAnimate 
+            ? { pathLength: [0, 1], opacity: [0, 1] } 
+            : { pathLength: 1, opacity: 1 }
+          }
+          transition={shouldAnimate 
+            ? { pathLength: { duration: 1.5, ease: 'easeInOut' }, opacity: { duration: 0.3 } }
+            : { duration: 0 }
+          }
         />
         
-        {/* Stylized Z mark - angular/circuit-like design */}
+        {/* Stylized Z mark - always visible */}
         <MotionPath
           d="M14 14 L34 14 L16 34 L34 34"
           stroke="url(#gradient)"
+          {...staticPathProps}
           strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-          variants={shouldAnimate ? pathVariants : undefined}
-          initial={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
-          animate={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
+          initial={{ pathLength: 1, opacity: 1 }}
+          animate={shouldAnimate 
+            ? { pathLength: [0, 1], opacity: [0, 1] } 
+            : { pathLength: 1, opacity: 1 }
+          }
+          transition={shouldAnimate 
+            ? { pathLength: { duration: 1.5, ease: 'easeInOut', delay: 0.3 }, opacity: { duration: 0.3, delay: 0.3 } }
+            : { duration: 0 }
+          }
         />
         
-        {/* Circuit nodes/dots at corners */}
+        {/* Circuit nodes/dots at corners - always visible */}
         <MotionPath
           d="M14 14 L14 14.1 M34 14 L34 14.1 M16 34 L16 34.1 M34 34 L34 34.1"
           stroke="#0d9488"
           strokeWidth="4"
           strokeLinecap="round"
           fill="none"
-          variants={shouldAnimate ? pathVariants : undefined}
-          initial={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
-          animate={shouldAnimate ? undefined : { pathLength: 1, opacity: 1 }}
+          initial={{ pathLength: 1, opacity: 1 }}
+          animate={{ pathLength: 1, opacity: 1 }}
         />
         
-        {/* Inner detail lines for circuit feel */}
+        {/* Inner detail lines for circuit feel - always visible */}
         <MotionPath
           d="M8 24 L12 24 M36 24 L40 24 M24 8 L24 12 M24 36 L24 40"
           stroke="url(#gradient)"
           strokeWidth="1.5"
           strokeLinecap="round"
           fill="none"
-          opacity={0.6}
-          variants={shouldAnimate ? pathVariants : undefined}
-          initial={shouldAnimate ? undefined : { pathLength: 1, opacity: 0.6 }}
-          animate={shouldAnimate ? undefined : { pathLength: 1, opacity: 0.6 }}
+          initial={{ pathLength: 1, opacity: 0.6 }}
+          animate={{ pathLength: 1, opacity: 0.6 }}
         />
 
         <defs>
