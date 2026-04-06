@@ -15,13 +15,13 @@ export function SmartBackground() {
       bottom={0}
       zIndex={-1}
       overflow="hidden"
-      bg="#0a0a0f"
+      bg={{ base: '#ffffff', _dark: '#0a0a0f' }}
     >
       {/* Base gradient */}
       <Box
         position="absolute"
         inset={0}
-        bg="linear-gradient(135deg, #0a0a0f 0%, #111118 50%, #0a0a0f 100%)"
+        bg={{ base: 'linear-gradient(135deg, #ffffff 0%, #f7f7f8 50%, #ffffff 100%)', _dark: 'linear-gradient(135deg, #0a0a0f 0%, #111118 50%, #0a0a0f 100%)' }}
       />
 
       {/* Animated gradient orbs */}
@@ -30,7 +30,7 @@ export function SmartBackground() {
         width="60vw"
         height="60vw"
         borderRadius="full"
-        bg="radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, transparent 70%)"
+        bg={{ base: 'radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, transparent 70%)', _dark: 'radial-gradient(circle, rgba(13, 148, 136, 0.15) 0%, transparent 70%)' }}
         filter="blur(60px)"
         initial={{ x: '-20%', y: '-20%' }}
         animate={{
@@ -49,7 +49,7 @@ export function SmartBackground() {
         width="50vw"
         height="50vw"
         borderRadius="full"
-        bg="radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, transparent 70%)"
+        bg={{ base: 'radial-gradient(circle, rgba(79, 70, 229, 0.06) 0%, transparent 70%)', _dark: 'radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, transparent 70%)' }}
         filter="blur(60px)"
         right="-10%"
         top="20%"
@@ -70,7 +70,7 @@ export function SmartBackground() {
         width="40vw"
         height="40vw"
         borderRadius="full"
-        bg="radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%)"
+        bg={{ base: 'radial-gradient(circle, rgba(124, 58, 237, 0.05) 0%, transparent 70%)', _dark: 'radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%)' }}
         filter="blur(60px)"
         left="30%"
         bottom="-10%"

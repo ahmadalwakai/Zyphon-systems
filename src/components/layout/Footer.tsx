@@ -87,10 +87,10 @@ export function Footer() {
           {/* Navigation Links */}
           <VStack align="start" gap={4}>
             <Text fontWeight="semibold" color={{ base: 'gray.900', _dark: 'white' }}>
-              Navigation
+              Pages
             </Text>
             <VStack align="start" gap={2}>
-              {footerNavigation.main.map((item) => (
+              {footerNavigation.pages.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <Text
                     fontSize="sm"
@@ -126,12 +126,26 @@ export function Footer() {
             </VStack>
           </VStack>
 
-          {/* Contact Info */}
+          {/* Contact & Resources */}
           <VStack align="start" gap={4}>
             <Text fontWeight="semibold" color={{ base: 'gray.900', _dark: 'white' }}>
-              Contact
+              Resources
             </Text>
-            <VStack align="start" gap={3}>
+            <VStack align="start" gap={2}>
+              {footerNavigation.resources.map((item) => (
+                <Link key={item.href} href={item.href}>
+                  <Text
+                    fontSize="sm"
+                    color={{ base: 'gray.600', _dark: 'gray.400' }}
+                    _hover={{ color: 'primary.500' }}
+                    transition="color 0.2s"
+                  >
+                    {item.label}
+                  </Text>
+                </Link>
+              ))}
+            </VStack>
+            <VStack align="start" gap={3} pt={2}>
               <HStack gap={3}>
                 <Mail size={16} color="#a1a1aa" />
                 <Text fontSize="sm" color={{ base: 'gray.600', _dark: 'gray.400' }}>
@@ -177,7 +191,7 @@ export function Footer() {
             © {currentYear} Zyphon Systems. All rights reserved.
           </Text>
           <Text fontSize="xs" color={{ base: 'gray.500', _dark: 'gray.500' }}>
-            Product Engineering for Modern Businesses
+            Built with precision.
           </Text>
         </Flex>
       </Container>

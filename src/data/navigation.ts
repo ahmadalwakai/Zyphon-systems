@@ -7,19 +7,26 @@ export const mainNavigation: NavItem[] = [
   { label: 'Solutions', href: '/solutions' },
   { label: 'Process', href: '/process' },
   { label: 'Projects', href: '/projects' },
+  { label: 'Insights', href: '/blog' },
   { label: 'Contact', href: '/contact' },
 ];
 
 export const footerNavigation = {
-  main: [
+  pages: [
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },
     { label: 'Services', href: '/services' },
     { label: 'Solutions', href: '/solutions' },
     { label: 'Process', href: '/process' },
     { label: 'Projects', href: '/projects' },
+    { label: 'Insights', href: '/blog' },
     { label: 'Contact', href: '/contact' },
     { label: 'FAQ', href: '/faq' },
+  ],
+  resources: [
+    { label: 'Company Profile (PDF)', href: '/api/profile' },
+    { label: 'Book a Meeting', href: '/book' },
+    { label: 'Customer Portal', href: '/portal/login' },
   ],
   services: [
     { label: 'Mobile App Development', href: '/services#mobile-apps' },
@@ -40,5 +47,7 @@ export const adminNavigation: NavItem[] = [
   { label: 'Inquiries', href: '/admin/inquiries' },
   { label: 'Bookings', href: '/admin/bookings' },
   { label: 'Projects', href: '/admin/projects' },
+  { label: 'Posts', href: '/admin/posts' },
+  { label: 'Compose', href: '/admin/compose' },
   { label: 'Settings', href: '/admin/settings' },
 ];

@@ -129,3 +129,64 @@ export async function sendBookingConfirmation(booking: {
     throw error;
   }
 }
+
+export async function sendVerificationEmail(email: string, token: string, fullName: string): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.log('RESEND_API_KEY not set, skipping verification email');
+    return;
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zyphon.systems';
+  const verifyUrl = `${siteUrl}/api/customer/verify?token=${encodeURIComponent(token)}`;
+
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to: email,
+      subject: 'Verify your Zyphon Systems account',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #0d9488;">Verify Your Account</h2>
+          <p>Hi ${fullName},</p>
+          <p>Thank you for creating an account with Zyphon Systems. Please verify your email address by clicking the button below:</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${verifyUrl}" style="background: #0d9488; color: white; padding: 12px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; display: inline-block;">Verify Email</a>
+          </div>
+          <p style="color: #6b7280; font-size: 14px;">Or copy and paste this link into your browser:</p>
+          <p style="color: #6b7280; font-size: 14px; word-break: break-all;">${verifyUrl}</p>
+          <p style="color: #6b7280; font-size: 14px;">If you didn't create this account, you can safely ignore this email.</p>
+          <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;" />
+          <p style="color: #9ca3af; font-size: 12px;">Zyphon Systems - Product Engineering for Modern Businesses</p>
+        </div>
+      `,
+    });
+  } catch (error) {
+    console.error('Failed to send verification email:', error);
+    throw error;
+  }
+}
+
+export async function sendCustomEmail(to: string, subject: string, body: string): Promise<void> {
+  if (!process.env.RESEND_API_KEY) {
+    console.log('RESEND_API_KEY not set, skipping email');
+    return;
+  }
+
+  try {
+    await resend.emails.send({
+      from: FROM_EMAIL,
+      to,
+      subject,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          ${body.replace(/\n/g, '<br />')}
+          <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0 20px;" />
+          <p style="color: #9ca3af; font-size: 12px;">Zyphon Systems - Product Engineering for Modern Businesses</p>
+        </div>
+      `,
+    });
+  } catch (error) {
+    console.error('Failed to send custom email:', error);
+    throw error;
+  }
+}

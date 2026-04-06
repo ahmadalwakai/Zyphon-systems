@@ -1,7 +1,9 @@
 'use client';
 
-import { Box, Heading, Text, VStack, Badge } from '@chakra-ui/react';
+import { Box, Heading, Text, VStack, Badge, Flex } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 import type { Project } from '@/types';
 
 const MotionBox = motion.create(Box);
@@ -12,7 +14,7 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, index }: ProjectCardProps) {
-  return (
+  const content = (
     <MotionBox
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -84,8 +86,19 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
               </Text>
             </Box>
           )}
+          {project.slug && (
+            <Flex align="center" gap={2} pt={2}>
+              <Text fontSize="sm" color="primary.500" fontWeight="medium">View Case Study</Text>
+              <ArrowRight size={14} color="#0d9488" />
+            </Flex>
+          )}
         </VStack>
       </Box>
     </MotionBox>
   );
+
+  if (project.slug) {
+    return <Link href={`/projects/${project.slug}`}>{content}</Link>;
+  }
+  return content;
 }

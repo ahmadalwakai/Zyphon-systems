@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { askGroq } from '@/lib/groq';
 import { verifyAdminSession } from '@/lib/auth';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!await checkRateLimit(ip, 'ai', 5, 'minute')) {
+      return NextResponse.json({ success: false, error: 'Too many requests.' }, { status: 429 });
+    }
+
     // Check authentication
     if (!await verifyAdminSession(request)) {
       return NextResponse.json(

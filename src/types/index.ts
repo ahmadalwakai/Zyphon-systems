@@ -23,6 +23,13 @@ export interface Project {
   isVisible: boolean;
   displayOrder: number;
   createdAt?: Date;
+  slug?: string;
+  challenge?: string;
+  approach?: string;
+  technologies?: string[];
+  results?: string;
+  testimonialQuote?: string;
+  testimonialAuthor?: string;
 }
 
 export interface ProcessStep {

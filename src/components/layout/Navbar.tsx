@@ -1,18 +1,36 @@
 'use client';
 
 import { Box, Container, Flex, HStack, Button, IconButton } from '@chakra-ui/react';
-import { Menu } from 'lucide-react';
+import { Menu, Search } from 'lucide-react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ZyphonLogo } from '@/components/brand/ZyphonLogo';
 import { MobileDrawer } from './MobileDrawer';
 import { mainNavigation } from '@/data/navigation';
 import { motion } from 'framer-motion';
+import { ColorModeToggle } from '@/components/ui/ColorModeToggle';
+import { SearchModal } from '@/components/ui/SearchModal';
 
 const MotionBox = motion.create(Box);
 
 export function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const handleToggleSearch = useCallback(() => {
+    setIsSearchOpen((prev) => !prev);
+  }, []);
+
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        handleToggleSearch();
+      }
+    };
+    window.addEventListener('keydown', handleKeydown);
+    return () => window.removeEventListener('keydown', handleKeydown);
+  }, [handleToggleSearch]);
 
   return (
     <>
@@ -55,7 +73,18 @@ export function Navbar() {
             </HStack>
 
             {/* Desktop CTA */}
-            <HStack gap={3} display={{ base: 'none', md: 'flex' }}>
+            <HStack gap={2} display={{ base: 'none', md: 'flex' }}>
+              <IconButton
+                aria-label="Search"
+                variant="ghost"
+                size="sm"
+                color={{ base: 'gray.600', _dark: 'gray.400' }}
+                _hover={{ color: 'primary.500' }}
+                onClick={() => setIsSearchOpen(true)}
+              >
+                <Search size={18} />
+              </IconButton>
+              <ColorModeToggle />
               <Link href="/book">
                 <Button
                   variant="outline"
@@ -85,15 +114,25 @@ export function Navbar() {
               </Link>
             </HStack>
 
-            {/* Mobile Menu Button */}
-            <IconButton
-              display={{ base: 'flex', md: 'none' }}
-              aria-label="Open menu"
-              variant="ghost"
-              onClick={() => setIsDrawerOpen(true)}
-            >
-              <Menu size={24} />
-            </IconButton>
+            {/* Mobile Buttons */}
+            <HStack gap={1} display={{ base: 'flex', md: 'none' }}>
+              <IconButton
+                aria-label="Search"
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsSearchOpen(true)}
+              >
+                <Search size={20} />
+              </IconButton>
+              <ColorModeToggle />
+              <IconButton
+                aria-label="Open menu"
+                variant="ghost"
+                onClick={() => setIsDrawerOpen(true)}
+              >
+                <Menu size={24} />
+              </IconButton>
+            </HStack>
           </Flex>
         </Container>
       </MotionBox>
@@ -102,6 +141,7 @@ export function Navbar() {
       <Box h="72px" />
 
       <MobileDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 }

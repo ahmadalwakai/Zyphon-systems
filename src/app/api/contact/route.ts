@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createInquiry } from '@/lib/db';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
   try {
+    const ip = request.headers.get('x-forwarded-for') || 'unknown';
+    if (!await checkRateLimit(ip, 'contact', 5, 'minute')) {
+      return NextResponse.json({ success: false, error: 'Too many requests. Please try again later.' }, { status: 429 });
+    }
+
     const body = await request.json();
     const { fullName, companyName, email, phone, projectType, budget, message } = body;
 
